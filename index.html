@@ -1,586 +1,498 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chúc mừng 20/10 💖</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: linear-gradient(180deg, #ffe0f0, #fff0f8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: "Poppins", sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcard Lịch Sử 12</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f7f4;
+  --card:#ffffff;
+  --border:#e2e0db;
+  --text:#1a1a1a;
+  --muted:#6b6866;
+  --blue:#1d5fa8;
+  --blue-light:#e8f0fb;
+  --blue-mid:#b8d0f2;
+  --green:#256b3a;
+  --green-light:#e6f4ec;
+  --red:#b52b2b;
+  --red-light:#fce8e8;
+  --purple:#4a3ab5;
+  --purple-light:#eeedfb;
+  --amber:#8a5a00;
+  --amber-light:#fdf3dc;
+  --radius:10px;
+  --radius-lg:14px;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px}
+h2.sr{position:absolute;left:-9999px}
 
-    .falling {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
+/* LAYOUT */
+.container{max-width:720px;margin:0 auto}
 
-    /* Container chứa chữ và trái tim */
-    .heart-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
+/* HEADER */
+.header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:16px}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.title-block h1{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px}
+.title-block p{font-size:12px;color:var(--muted)}
+.stats{display:flex;gap:16px;align-items:center;flex-shrink:0}
+.stat{text-align:center;min-width:40px}
+.stat-n{font-size:20px;font-weight:600;line-height:1}
+.stat-n.blue{color:var(--blue)}
+.stat-n.green{color:var(--green)}
+.stat-n.red{color:var(--red)}
+.stat-l{font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
 
-    /* Dòng chữ phía trên trái tim */
-    .heart-text {
-      color: #ff4d6d;
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 20px;
-      text-align: center;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      font-family: 'Dancing Script', cursive;
-      animation: textPulse 2s infinite;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 10px 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(255, 77, 109, 0.2);
-    }
+/* TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tab{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--muted);font-weight:500;transition:all .15s}
+.tab:hover{background:var(--bg);border-color:#bbb}
+.tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.tab-b13.active{background:#1d5fa8;border-color:#1d5fa8}
+.tab-b14.active{background:#4a3ab5;border-color:#4a3ab5}
+.tab-b15.active{background:#256b3a;border-color:#256b3a}
+.tab-b16.active{background:#8a5a00;border-color:#8a5a00}
+.tab-all.active{background:#1a1a1a;border-color:#1a1a1a}
 
-    @keyframes textPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
+/* PROGRESS */
+.prog-wrap{display:flex;align-items:center;gap:10px}
+.prog-bar{flex:1;height:7px;background:#eee;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .4s ease;background:var(--blue)}
+.prog-label{font-size:12px;color:var(--muted);min-width:50px;text-align:right}
 
-    /* Trái tim cân đối hơn */
-    .heart {
-      position: relative;
-      width: 100px;
-      height: 90px;
-      cursor: pointer;
-      animation: pulse 1.5s infinite;
-      z-index: 10;
-    }
-    .heart:before,
-    .heart:after {
-      content: "";
-      position: absolute;
-      left: 50px;
-      top: 0;
-      width: 50px;
-      height: 80px;
-      background: #ff4d6d;
-      border-radius: 50px 50px 0 0;
-      transform: rotate(-45deg);
-      transform-origin: 0 100%;
-    }
-    .heart:after {
-      left: 0;
-      transform: rotate(45deg);
-      transform-origin: 100% 100%;
-    }
+/* QUESTION CARD */
+.qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 24px;margin-bottom:14px;min-height:260px}
+.qcard-meta{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.badge-lvl1{background:var(--blue-light);color:var(--blue)}
+.badge-lvl2{background:#fff3e0;color:#b55a00}
+.badge-lvl3{background:#f3e8ff;color:#5a2db5}
+.badge-lvl4{background:#ffe8e8;color:#b52b2b}
+.badge-lesson{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.badge-b13{background:var(--blue-light);color:var(--blue)}
+.badge-b14{background:var(--purple-light);color:var(--purple)}
+.badge-b15{background:var(--green-light);color:var(--green)}
+.badge-b16{background:var(--amber-light);color:var(--amber)}
+.qnum{margin-left:auto;font-size:12px;color:var(--muted)}
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
+.qtext{font-size:15px;font-weight:500;line-height:1.7;color:var(--text);margin-bottom:18px}
 
-    /* Lá thư được trang trí đẹp hơn - KÍCH THƯỚC NHỎ HƠN */
-    .letter {
-      position: absolute;
-      width: 350px;
-      height: 280px;
-      background: #fffaf0;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15), 
-                  inset 0 0 0 1px #fff,
-                  inset 0 0 30px rgba(255,182,193,0.2);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transform: translateY(50px) scale(0.9);
-      transition: all 1s ease;
-      z-index: 5;
-      padding: 20px;
-      text-align: center;
-      overflow: hidden;
-      border: 1px solid #ffd1dc;
-    }
+/* OPTIONS */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.opts{grid-template-columns:1fr}}
+.opt{background:#fafaf9;border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;font-size:13.5px;color:var(--text);cursor:pointer;text-align:left;line-height:1.5;transition:border-color .12s,background .12s;display:flex;gap:10px;align-items:flex-start}
+.opt-key{font-weight:600;color:var(--muted);flex-shrink:0;font-size:13px;min-width:18px}
+.opt:hover:not(:disabled){background:#f2f1ef;border-color:#bbb}
+.opt.correct{background:var(--green-light);border-color:#4caf50;color:var(--green)}
+.opt.correct .opt-key{color:var(--green)}
+.opt.wrong{background:var(--red-light);border-color:#e57373;color:var(--red)}
+.opt.wrong .opt-key{color:var(--red)}
+.opt:disabled{cursor:default}
 
-    /* Responsive cho mobile */
-    @media (max-width: 768px) {
-      .letter {
-        width: 90vw;
-        max-width: 320px;
-        height: 65vh;
-        max-height: 450px;
-        padding: 15px;
-      }
-      
-      .heart-text {
-        font-size: 16px;
-        padding: 8px 15px;
-        margin-bottom: 15px;
-      }
-      
-      .message {
-        font-size: 14px;
-        max-height: 60vh;
-      }
-    }
+/* EXPLANATION */
+.explain{margin-top:14px;font-size:13px;line-height:1.65;padding:12px 16px;background:var(--blue-light);border-left:3px solid var(--blue);border-radius:0 var(--radius) var(--radius) 0;color:#0d3d73}
 
-    @media (max-width: 480px) {
-      .letter {
-        width: 95vw;
-        height: 70vh;
-        padding: 10px;
-      }
-      
-      .heart-text {
-        font-size: 14px;
-        padding: 6px 12px;
-      }
-      
-      .message {
-        font-size: 13px;
-      }
-    }
+/* NAV */
+.nav{display:flex;gap:8px;align-items:center}
+.btn{padding:9px 20px;font-size:13px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);cursor:pointer;font-weight:500;transition:all .12s}
+.btn:hover{background:#f0efed;border-color:#bbb}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:#174f93}
+.nav-spacer{flex:1}
+.nav-info{font-size:12px;color:var(--muted)}
 
-    .letter.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    .letter:before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 12px;
-      background: linear-gradient(90deg, #ffb6c1, #ff69b4, #ffb6c1);
-      border-radius: 8px 8px 0 0;
-    }
-
-    .letter:after {
-      content: "";
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 40px;
-      height: 40px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffb6c1' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
-      background-size: contain;
-      opacity: 0.3;
-    }
-
-    .letter-content {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 10px;
-    }
-
-    .letter-pattern {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        radial-gradient(#ffd1dc 1px, transparent 1px),
-        radial-gradient(#ffd1dc 1px, transparent 1px);
-      background-size: 20px 20px;
-      background-position: 0 0, 10px 10px;
-      opacity: 0.2;
-      z-index: 0;
-    }
-
-    /* Font chữ nhỏ hơn để chứa nhiều nội dung */
-    .message {
-      color: #8b4513;
-      font-size: 15px;
-      font-weight: 500;
-      white-space: pre-line;
-      text-align: center;
-      line-height: 1.5;
-      z-index: 1;
-      position: relative;
-      font-family: 'Dancing Script', cursive;
-      font-weight: 700;
-      max-height: 200px;
-      overflow-y: auto;
-      padding: 0 10px;
-      width: 100%;
-    }
-
-    /* Thanh cuộn tùy chỉnh cho message */
-    .message::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    .message::-webkit-scrollbar-track {
-      background: rgba(255, 182, 193, 0.2);
-      border-radius: 10px;
-    }
-
-    .message::-webkit-scrollbar-thumb {
-      background: #ff69b4;
-      border-radius: 10px;
-    }
-
-    .message:before {
-      content: "";
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #ff69b4, transparent);
-    }
-
-    .stamp {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      width: 60px;
-      height: 60px;
-      border: 2px dashed #ff69b4;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #ff69b4;
-      font-size: 10px;
-      font-weight: bold;
-      transform: rotate(15deg);
-      background: rgba(255,255,255,0.7);
-    }
-
-    .stamp:before {
-      content: "20/10";
-      font-family: 'Poppins', sans-serif;
-    }
-
-    /* Đóa hoa nhỏ */
-    .small-flower {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 30px;
-      cursor: pointer;
-      opacity: 0;
-      transition: all 0.5s ease;
-      z-index: 6;
-      animation: float 3s ease-in-out infinite;
-      filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
-    }
-
-    .small-flower.show {
-      opacity: 1;
-    }
-
-    /* Đóa hoa lớn */
-    .big-flower {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      font-size: 150px;
-      z-index: 20;
-      transition: transform 1s ease;
-      pointer-events: none;
-      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
-    }
-
-    .big-flower.show {
-      transform: translate(-50%, -50%) scale(1);
-      animation: rainbow 2s linear infinite, rotate 10s linear infinite;
-    }
-
-    /* Hiệu ứng pháo hoa */
-    .firework {
-      position: fixed;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 15;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateX(-50%) translateY(0px); }
-      50% { transform: translateX(-50%) translateY(-10px); }
-    }
-
-    @keyframes rainbow {
-      0% { filter: hue-rotate(0deg) drop-shadow(0 0 20px rgba(255, 255, 255, 0.8)); }
-      100% { filter: hue-rotate(360deg) drop-shadow(0 0 20px rgba(255, 255, 255, 0.8)); }
-    }
-
-    @keyframes rotate {
-      0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) scale(1) rotate(360deg); }
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
-
-    .petal {
-      position: absolute;
-      top: -10vh;
-      font-size: 20px;
-      animation: fall linear forwards;
-      opacity: 0.7;
-    }
-
-    .fly-up {
-      animation: flyUp 1s forwards;
-    }
-
-    @keyframes flyUp {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-300px) scale(0); opacity: 0; }
-    }
-  </style>
+/* SCORE SCREEN */
+.score-screen{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px 24px;text-align:center;margin-bottom:14px}
+.score-circle{width:100px;height:100px;border-radius:50%;background:var(--blue-light);border:3px solid var(--blue-mid);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;flex-direction:column}
+.score-pct{font-size:26px;font-weight:700;color:var(--blue);line-height:1}
+.score-lbl{font-size:10px;color:var(--blue);margin-top:2px}
+.score-title{font-size:18px;font-weight:600;margin-bottom:8px}
+.score-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.score-row{display:flex;gap:12px;justify-content:center;margin-bottom:24px}
+.score-card{padding:12px 20px;border-radius:var(--radius);border:1px solid var(--border);text-align:center;min-width:80px}
+.score-card .n{font-size:22px;font-weight:700}
+.score-card .l{font-size:11px;color:var(--muted);margin-top:2px}
+.sc-green .n{color:var(--green)}
+.sc-red .n{color:var(--red)}
+.sc-blue .n{color:var(--blue)}
+</style>
 </head>
 <body>
+<h2 class="sr">Flashcard Lịch Sử 12 – Bài 13, 14, 15, 16</h2>
+<div class="container">
 
-  <audio id="backgroundMusic" loop preload="auto">
-  <source src="https://raw.githubusercontent.com/BaconBossScript/mthuy/main/music.mp3" type="audio/mpeg">
-  Trình duyệt của bạn không hỗ trợ audio
-  </audio>
-
-  <div class="falling"></div>
-  
-  <div class="heart-container">
-    <div class="heart-text">nhấn vô đây nèk</div>
-    <div class="heart"></div>
-  </div>
-  
-  <div class="letter">
-    <div class="letter-pattern"></div>
-    <div class="stamp"></div>
-    <div class="letter-content">
-      <div class="message" id="msg"></div>
-      <div class="small-flower" id="smallFlower">💐</div>
+<div class="header">
+  <div class="header-top">
+    <div class="title-block">
+      <h1>Ôn tập Lịch Sử 12</h1>
+      <p id="subtitle">Chọn bài để bắt đầu ôn tập</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-n blue" id="s-total">0</div><div class="stat-l">câu</div></div>
+      <div class="stat"><div class="stat-n green" id="s-correct">0</div><div class="stat-l">đúng</div></div>
+      <div class="stat"><div class="stat-n red" id="s-wrong">0</div><div class="stat-l">sai</div></div>
     </div>
   </div>
-  <div class="big-flower" id="bigFlower">💐</div>
+  <div class="tabs" id="tabs">
+    <button class="tab tab-b13" onclick="setLesson('B13')">Bài 13</button>
+    <button class="tab tab-b14" onclick="setLesson('B14')">Bài 14</button>
+    <button class="tab tab-b15" onclick="setLesson('B15')">Bài 15</button>
+    <button class="tab tab-b16" onclick="setLesson('B16')">Bài 16</button>
+    <button class="tab tab-all active" onclick="setLesson('ALL')">Tất cả</button>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="prog-label" id="prog-label">0 / 0</div>
+  </div>
+</div>
 
-  <script>
-    const falling = document.querySelector('.falling');
-    const heart = document.querySelector('.heart');
-    const heartContainer = document.querySelector('.heart-container');
-    const letter = document.querySelector('.letter');
-    const msgEl = document.getElementById('msg');
-    const smallFlower = document.getElementById('smallFlower');
-    const bigFlower = document.getElementById('bigFlower');
+<div id="qcard" class="qcard">
+  <div class="qcard-meta">
+    <span class="badge" id="b-lvl">-</span>
+    <span class="badge-lesson badge" id="b-lesson">-</span>
+    <span class="qnum" id="b-num">-</span>
+  </div>
+  <div class="qtext" id="qtext">Nhấn một bài học hoặc "Tất cả" để bắt đầu.</div>
+  <div class="opts" id="opts"></div>
+  <div class="explain" id="explain" style="display:none"></div>
+</div>
 
-    let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+<div class="nav" id="nav">
+  <button class="btn" id="btn-prev" onclick="go(-1)" style="display:none">← Trước</button>
+  <button class="btn" onclick="skipQ()">Bỏ qua</button>
+  <div class="nav-spacer"></div>
+  <span class="nav-info" id="nav-info"></span>
+  <button class="btn primary" id="btn-next" onclick="go(1)" style="display:none">Tiếp →</button>
+</div>
 
-    // Sự kiện cho mobile - touchstart
-    heart.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      handleHeartClick();
-    });
+</div>
 
-    // Sự kiện cho desktop - click
-    heart.addEventListener('click', () => {
-      handleHeartClick();
-    });
-    
-    const audio = document.getElementById('backgroundMusic');
+<script>
+const LESSONS = {
+  B13: {name:'Bài 13 – Hoạt động đối ngoại VN', color:'#1d5fa8', cls:'b13'},
+  B14: {name:'Bài 14 – Cuộc đời và sự nghiệp HCM', color:'#4a3ab5', cls:'b14'},
+  B15: {name:'Bài 15 – HCM: Anh hùng giải phóng dân tộc', color:'#256b3a', cls:'b15'},
+  B16: {name:'Bài 16 – Dấu ấn HCM trong lòng nhân dân', color:'#8a5a00', cls:'b16'},
+};
 
-    function handleHeartClick() {
-      audio.muted = false;
+// ── BÀI 13 ──────────────────────────────────────────────
+const B13 = [
+{l:'#1',q:'Năm 1978, Việt Nam gia nhập tổ chức nào sau đây?',o:['SEV','EU','ASEAN','NATO'],a:0,e:'Năm 1978, Việt Nam gia nhập SEV (Hội đồng Tương trợ Kinh tế xã hội chủ nghĩa).'},
+{l:'#1',q:'Tính đến tháng 3-2024, Việt Nam có mối quan hệ "Đối tác chiến lược toàn diện" với bao nhiêu quốc gia?',o:['5','6','7','8'],a:2,e:'Đến tháng 3-2024, Việt Nam có 7 đối tác chiến lược toàn diện.'},
+{l:'#1',q:'Một trong những thuận lợi của nước VNDCCH sau Cách mạng tháng Tám (1945) là',o:['Nhân dân hăng hái ủng hộ cách mạng','Được sự công nhận của các cường quốc','Là thành viên của Liên hợp quốc','Thực dân Pháp đã đầu hàng quân Nhật'],a:0,e:'Nhân dân hăng hái ủng hộ cách mạng là thuận lợi lớn nhất sau CMT8 năm 1945.'},
+{l:'#1',q:'Một trong các hội nghị quốc tế quan trọng mà Việt Nam đã tổ chức thành công là',o:['APEC','COP28','ICEC','OPEC'],a:0,e:'Việt Nam đã đăng cai tổ chức thành công Hội nghị cấp cao APEC.'},
+{l:'#1',q:'Từ năm 1986 đến nay, Việt Nam đã ký các hiệp ước về biên giới trên đất liền với quốc gia nào?',o:['Trung Quốc','Hàn Quốc','Liên Xô','Triều Tiên'],a:0,e:'Việt Nam ký Hiệp ước biên giới trên đất liền với Trung Quốc (1999).'},
+{l:'#1',q:'Liên minh Việt – Miên – Lào (1951) là',o:['Liên minh tự nguyện của ba nước Đông Dương','Tổ chức hợp tác kinh tế, chính trị Đông Dương','Liên minh quân sự của ba nước Đông Dương','Tổ chức hợp tác phát triển của Đông Dương'],a:0,e:'Liên minh Việt – Miên – Lào là liên minh tự nguyện chống thực dân Pháp.'},
+{l:'#1',q:'Hội nghị Giơ-ne-vơ (1954) được triệu tập để giải quyết vấn đề nào?',o:['Đông Đức','Đông Dương','Cam-pu-chia','Trung Đông'],a:1,e:'Hội nghị Giơ-ne-vơ 1954 giải quyết vấn đề chấm dứt chiến tranh ở Đông Dương.'},
+{l:'#1',q:'Một trong những đối tượng của hoạt động đối ngoại mà VNDCCH tiến hành từ sau CMT8 (1945) là',o:['Pháp','Cuba','Ai Cập','Anh'],a:0,e:'Pháp là đối tượng quan trọng trong ngoại giao của VNDCCH sau 1945.'},
+{l:'#1',q:'Năm 1945, một trong những hoạt động đối ngoại của VNDCCH là',o:['Gửi Công hàm đề nghị các nước lớn công nhận','Chủ tịch HCM đi thăm các nước XHCN','Cử đại biểu dự Đại hội Quốc tế cộng sản','Ký với đại diện Pháp bản Hiệp định Sơ bộ'],a:0,e:'Năm 1945, VNDCCH gửi Công hàm đề nghị các nước lớn công nhận Việt Nam.'},
+{l:'#1',q:'Năm 1950, quốc gia đầu tiên thiết lập quan hệ ngoại giao với VNDCCH là',o:['Liên Xô','Trung Quốc','Cộng hòa Dân chủ Đức','Cộng hòa Liên bang Đức'],a:1,e:'Trung Quốc là nước đầu tiên thiết lập quan hệ ngoại giao với VNDCCH năm 1950.'},
+{l:'#1',q:'Trong giai đoạn 1975–1985, Việt Nam tham gia',o:['Phong trào không liên kết','Tổ chức Đồng Xoài','Chiến dịch Mậu Thân','Chiến dịch Núi Thành'],a:0,e:'Giai đoạn 1975-1985, Việt Nam tham gia Phong trào không liên kết.'},
+{l:'#1',q:'Nội dung "Hợp tác bình đẳng cùng có lợi..." được Đại hội Đảng lần thứ mấy đề ra?',o:['IV','VI','VII','XI'],a:2,e:'Đại hội Đảng lần VII đề ra đường lối đối ngoại độc lập, tự chủ, đa dạng hóa.'},
+{l:'#1',q:'Một trong những quốc gia có quan hệ "Đối tác chiến lược toàn diện" với VN tính đến 3-2024 là',o:['Mỹ','Đức','Anh','Cuba'],a:0,e:'Mỹ là một trong 7 đối tác chiến lược toàn diện của Việt Nam tính đến 3-2024.'},
+{l:'#1',q:'Hiệp định Sơ bộ (6/3/1946), Pháp đã công nhận Việt Nam là quốc gia',o:['Độc lập','Tự do','Dân chủ','Dân quyền'],a:1,e:'Hiệp định Sơ bộ 6/3/1946: Pháp công nhận Việt Nam là "quốc gia tự do".'},
+{l:'#1',q:'Ngày 14/9/1946, Chủ tịch HCM đã ký với Pháp văn kiện nào?',o:['Tạm ước','Khế ước','Công ước','Hiệp ước'],a:0,e:'Ngày 14/9/1946, Chủ tịch HCM ký Tạm ước với Pháp để kéo dài thời gian hòa bình.'},
+{l:'#1',q:'Một trong những nội dung của quyền dân tộc cơ bản là',o:['Độc lập','Bình đẳng','Hạnh phúc','Công bằng'],a:1,e:'Quyền dân tộc cơ bản gồm: độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ và bình đẳng.'},
+{l:'#1',q:'Hoạt động đối ngoại VN đối với TQ giai đoạn 1975-1985',o:['Đàm phán giải quyết xung đột biên giới','Hội nghị thượng đỉnh về vấn đề ASEAN','Đàm phán khai thác chung nguồn khí đốt','Thương lượng để TQ tăng cường viện trợ'],a:0,e:'1975-1985, VN tập trung đàm phán giải quyết xung đột biên giới với Trung Quốc.'},
+{l:'#1',q:'Một trong những nguyên nhân VN phát triển quan hệ hữu nghị với Lào là',o:['Truyền thống đấu tranh chống kẻ thù xâm lược','Đường biên giới trên biển và trên bộ ~3.000km','Có kẻ thù chung và cùng động cơ lấy khí đốt','Hợp tác trên sông Mê-kong bảo vệ nông nghiệp'],a:0,e:'Truyền thống lịch sử đấu tranh chống kẻ thù xâm lược chung là nguyên nhân chính.'},
+{l:'#1',q:'Từ năm 1975-1985, đối ngoại VN tập trung chống lại',o:['Âm mưu chia cắt Đông Dương','Cuộc tấn công của Trung Quốc','Cuộc bao vây cấm vận của Mỹ','Âm mưu chia rẽ tổ chức ASEAN'],a:2,e:'Giai đoạn 1975-1985, VN chống cuộc bao vây cấm vận của Mỹ là nhiệm vụ trọng tâm.'},
+{l:'#1',q:'Hoạt động đối ngoại VN những năm gần đây gắn liền với',o:['Viện trợ không hoàn lại cho các nước phát triển','Ứng phó biến đổi thời tiết, cứu hộ tài nguyên','Giao lưu văn hoá, ứng phó biến đổi thời tiết','Hỗ trợ nhân đạo, cứu hộ thiên tai, bảo vệ môi trường'],a:3,e:'Hoạt động đối ngoại hiện nay gắn với hỗ trợ nhân đạo, cứu hộ thiên tai, bảo vệ môi trường.'},
+{l:'#1',q:'Thuận lợi của hoạt động đối ngoại từ 1986 đến nay so với trước là',o:['Vị thế của Việt Nam ngày càng được nâng cao','Kẻ thù trực tiếp đã trở nên suy yếu','Khai thông được tuyến biên giới Việt – Trung','Mâu thuẫn giữa các nước lớn đã được xóa bỏ'],a:0,e:'Từ 1986, vị thế VN ngày càng nâng cao là thuận lợi lớn cho hoạt động đối ngoại.'},
+{l:'#1',q:'Kết quả từ việc ký Hiệp định Sơ bộ ngày 6/3/1946 là',o:['Đẩy hai mươi vạn quân Tưởng về nước','Pháp còn ở Việt Nam mười ngàn quân','Pháp công nhận hoàn toàn độc lập VN','Các nước XHCN đã viện trợ cho VN'],a:0,e:'Kết quả Hiệp định Sơ bộ 6/3/1946: đẩy 20 vạn quân Tưởng về nước.'},
+{l:'#1',q:'Trở ngại lớn nhất cho VN hội nhập Đông Nam Á giai đoạn 1975-1991 là',o:['Quân đội quá lớn mạnh','Vấn đề của Cam-pu-chia','Trung Quốc ngăn cản','Việt Nam còn lạc hậu'],a:1,e:'Vấn đề Cam-pu-chia là trở ngại lớn nhất cho VN hội nhập ASEAN giai đoạn 1975-1991.'},
+{l:'#1',q:'Một trong những hoạt động đối ngoại VN giai đoạn 1975-1985 là',o:['Thành lập các tổ chức thương mại quốc tế','Đấu tranh chống bao vây cấm vận từ bên ngoài','Tham gia tích cực các diễn đàn ASEAN','Đẩy mạnh hoạt động bảo vệ môi trường'],a:1,e:'1975-1985, VN đấu tranh chống bao vây cấm vận là hoạt động đối ngoại trọng tâm.'},
+{l:'#1',q:'Giai đoạn 1975–1985, Việt Nam đẩy mạnh hợp tác toàn diện với',o:['Liên Xô, TQ và các nước Đông Nam Á','Liên Xô, Cam-pu-chia và các nước ASEAN','Liên Xô, TQ và các nước Đông Âu','Liên Xô và các nước xã hội chủ nghĩa'],a:3,e:'1975-1985, VN đẩy mạnh hợp tác toàn diện với Liên Xô và các nước XHCN.'},
+{l:'#2',q:'Nội dung nào KHÔNG phản ánh đúng hoạt động đối ngoại VN từ 1986 đến nay?',o:['Phá thế bao vây cấm vận','Mở rộng quan hệ hợp tác với nhiều đối tác','Gia nhập và đóng góp tích cực cho các tổ chức quốc tế','VN trở thành thành viên chủ lực nhất trong ASEAN'],a:3,e:'VN không phải "thành viên chủ lực nhất" trong ASEAN – đây là nội dung không đúng.'},
+{l:'#2',q:'1975-1985, đối ngoại VN chú trọng phát triển quan hệ hữu nghị với',o:['Liên Xô và các nước XHCN','Mỹ và các nước phương Tây','Trung Quốc và ASEAN','Nhật Bản và Hàn Quốc'],a:0,e:'1975-1985, VN chú trọng quan hệ với Liên Xô và các nước XHCN.'},
+{l:'#2',q:'Các hoạt động đối ngoại VNDCCH từ sau CMT8 phải tuân thủ nguyên tắc nào?',o:['Không vi phạm đến chủ quyền dân tộc','Không nhận nhượng thỏa hiệp với Pháp','Nhân nhượng tất cả yêu cầu của Tưởng','Giải quyết xung đột bằng thương lượng'],a:0,e:'Nguyên tắc: không vi phạm đến chủ quyền dân tộc là nguyên tắc bất di bất dịch.'},
+{l:'#2',q:'Mục đích đối ngoại VNDCCH từ sau CMT8 đến trước 19/12/1946 là',o:['Tranh thủ phát triển kinh tế đất nước','Xin gia nhập các tổ chức hòa bình quốc tế','Yêu cầu các nước thiết lập quan hệ ngoại giao','Tránh một lúc phải đối phó với nhiều kẻ thù'],a:3,e:'Mục đích: tránh cùng lúc đối phó nhiều kẻ thù, giữ hòa bình để chuẩn bị lực lượng.'},
+{l:'#2',q:'Mục đích Chủ tịch HCM ký Tạm ước với Pháp ngày 14/9/1946 là',o:['Kéo dài thời gian hòa bình để chuẩn bị kháng chiến','Tranh thủ thời gian điều động bộ đội từ Nam ra','Đợi chi viện từ các nước XHCN anh em','Tranh thủ khi lực lượng Pháp còn yếu để đàm phán'],a:0,e:'Tạm ước 14/9/1946 nhằm kéo dài thời gian hòa bình để chuẩn bị kháng chiến lâu dài.'},
+{l:'#3',q:'Nguyên tắc cơ bản để đàm phán Hiệp định Sơ bộ 1946, Giơ-ne-vơ 1954 và Pa-ri 1973 là',o:['Tôn trọng quyền dân tộc cơ bản của Việt Nam','Đóng quân chia thành các vùng riêng biệt','Các bên tham chiến phải nhanh chóng rút quân','Không sử dụng các loại vũ khí hủy diệt'],a:0,e:'Nguyên tắc: tôn trọng quyền dân tộc cơ bản là sợi chỉ đỏ xuyên suốt ba Hiệp định.'},
+{l:'#2',q:'Hội nghị Pa-ri (1969-1973) được tổ chức với mục đích',o:['Chống âm mưu xâm lược bán đảo Đông Dương','Thiết lập liên minh giữa các nước XHCN','Tìm giải pháp kết thúc chiến tranh Việt Nam','Thương lượng kết thúc khủng hoảng tên lửa'],a:2,e:'Hội nghị Pa-ri 1969-1973 tìm giải pháp kết thúc chiến tranh Việt Nam.'},
+{l:'#2',q:'Ký Hiệp định Pari (1973) có ý nghĩa là',o:['Mở ra kỷ nguyên mới độc lập và thống nhất dân tộc','Nhiệm vụ "đánh cho Mỹ cút" cơ bản hoàn thành','Tạo thời cơ để hai miền thống nhất về chính trị','Đánh dấu kết thúc đấu tranh chống thực dân của VN'],a:1,e:'Ký Hiệp định Pa-ri: nhiệm vụ "đánh cho Mỹ cút" của nhân dân VN cơ bản hoàn thành.'},
+{l:'#2',q:'Nguyên nhân VN coi trọng quan hệ và hợp tác với Liên Xô là',o:['Viện trợ kinh tế, quân sự, ủng hộ về chính trị','Đồng ý đứng dưới cái ô hạt nhân của Liên Xô','Cần liên kết với LX để chống Trung Quốc','Dựa vào ưu thế của LX để đánh Khơ-me đỏ'],a:0,e:'VN coi trọng LX vì viện trợ kinh tế, quân sự và ủng hộ về chính trị.'},
+{l:'#2',q:'Trong kháng chiến chống Pháp (1945–1954), hoạt động đối ngoại nào VN thực hiện?',o:['Kí Hiệp định Pari với Hoa Kỳ','Gia nhập Hiệp hội các quốc gia Đông Nam Á','Kí Hiệp định Sơ bộ với Pháp','Bình thường hoá quan hệ ngoại giao với Mỹ'],a:2,e:'Trong kháng chiến chống Pháp, VN ký Hiệp định Sơ bộ với Pháp (6/3/1946).'},
+{l:'#2',q:'Chính sách đối ngoại của Việt Nam hiện nay có nội dung',o:['Chú trọng quan hệ song phương và đa phương','Lấy kinh tế quốc doanh là thành phần chủ đạo','Tập trung khôi phục quan hệ với nhà nước LX','Không tham gia, ủng hộ bất cứ tổ chức nào'],a:0,e:'Chính sách đối ngoại hiện nay: chú trọng quan hệ song phương và đa phương.'},
+{l:'#2',q:'Thời kỳ 1954-1975, đối ngoại VN phục vụ sự nghiệp nào?',o:['Bảo vệ miền Bắc, xây dựng CNXH','Giải phóng miền Nam, thống nhất đất nước','Bảo vệ và thống nhất chủ nghĩa xã hội','Thống nhất đất nước bằng con đường hòa bình'],a:1,e:'1954-1975, đối ngoại phục vụ mục tiêu giải phóng miền Nam, thống nhất đất nước.'},
+{l:'#2',q:'Sự kiện nào là bước ngoặt mới trong kháng chiến chống Mỹ 1954-1975?',o:['Hội nghị cấp cao ba nước Đông Dương','Hiệp định Pa-ri ký kết năm 1973','Bước tiến công chiến lược năm 1972','Chiến thắng Lam Sơn 719 năm 1971'],a:1,e:'Hiệp định Pa-ri 1973 là bước ngoặt quan trọng trong kháng chiến chống Mỹ.'},
+{l:'#2',q:'Nhà nước VNDCCH sau khi ra đời thực hiện đối ngoại nhằm',o:['Bảo vệ chính quyền, hoàn thành cách mạng dân tộc','Tranh thủ ủng hộ quốc tế bảo vệ độc lập','Tránh đối đầu, đánh bại quân Tưởng và QDĐ','Tránh chiến tranh bằng mọi giá với Pháp'],a:1,e:'VNDCCH đối ngoại để tranh thủ ủng hộ quốc tế cho sự nghiệp bảo vệ độc lập.'},
+{l:'#2',q:'Hoạt động đối ngoại từ CMT8 đến trước 19/12/1946 có ý nghĩa',o:['Tạo điều kiện cho các chiến dịch quân sự','Tập hợp quần chúng đứng dưới ngọn cờ Đảng','Tranh thủ hòa hoãn để chờ chi viện','Bảo vệ thành quả Cách mạng tháng Tám 1945'],a:3,e:'Ý nghĩa chính: bảo vệ thành quả Cách mạng tháng Tám năm 1945.'},
+{l:'#2',q:'Thắng lợi nào buộc Mỹ phải chấp nhận ký Hiệp định Pa-ri?',o:['Điện Biên Phủ trên không','Tiến công chiến lược 1972','Chiến dịch Huế-Đà Nẵng','Chiến dịch Hồ Chí Minh'],a:0,e:'Chiến thắng Điện Biên Phủ trên không buộc Mỹ chấp nhận ký Hiệp định Pa-ri 1973.'},
+{l:'#2',q:'Sự kiện nào đánh dấu quan hệ VN với thế giới được cải thiện mở rộng?',o:['Miền Nam được giải phóng','Bắt đầu công cuộc Đổi mới (1986)','Gia nhập Liên hợp quốc','Tham gia cộng đồng ASEAN'],a:1,e:'Bắt đầu Đổi mới (1986) đánh dấu quan hệ quốc tế của VN được cải thiện mở rộng.'},
+{l:'#2',q:'Một trong những khó khăn của VNDCCH sau CMT8 (1945) là',o:['Phát xít Nhật chưa chấp nhận đầu hàng','Phải đối phó với thù trong và giặc ngoài','Hai mươi vạn quân Tưởng ở miền Nam','Anh, Mỹ cho Pháp tiến quân ra miền Bắc'],a:1,e:'Khó khăn lớn nhất: phải đối phó với thù trong và giặc ngoài cùng một lúc.'},
+{l:'#2',q:'Sự kiện nào diễn ra năm 1995?',o:['Việt Nam gia nhập ASEAN','VN đảm nhiệm Chủ tịch ASEAN','VN tham gia Diễn đàn hợp tác Á-Âu','VN ký Hiệp định hoà bình Pa-ri về Cam-pu-chia'],a:0,e:'Năm 1995, Việt Nam chính thức gia nhập tổ chức ASEAN.'},
+{l:'#3',q:'Hoạt động đối ngoại gần đây góp phần',o:['Giúp VN thoát khỏi khủng hoảng kinh tế','Giúp VN đạt thành tựu đột phá về an ninh','Nâng cao vị thế của VN trong khu vực và thế giới','Đưa VN trở thành cường quốc số một châu Á'],a:2,e:'Đối ngoại gần đây góp phần nâng cao vị thế và uy tín VN trong khu vực và thế giới.'},
+{l:'#3',q:'Từ 2008-2023, VN thiết lập đối tác chiến lược toàn diện với các quốc gia nào?',o:['TQ, LB Nga, Ấn Độ, Hàn Quốc, Mỹ, Nhật Bản','TQ, LB Nga, Lào, Hàn Quốc, Mỹ, Nhật Bản','TQ, LB Nga, Cu-ba, Hàn Quốc, Mỹ, Nhật Bản','TQ, LB Nga, Ấn Độ, Triều Tiên, Mỹ, Nhật Bản'],a:0,e:'6 ĐTCLTTD: Trung Quốc, LB Nga, Ấn Độ, Hàn Quốc, Mỹ, Nhật Bản.'},
+{l:'#3',q:'Thách thức khi VN tham gia các tổ chức quốc tế là',o:['Có nguy cơ đánh mất bản sắc văn hóa dân tộc','Gây mâu thuẫn sâu sắc hơn trên biển Đông','Bị ép tham gia các khối liên minh quân sự','Nguồn lao động giá rẻ châu Âu cạnh tranh'],a:0,e:'Thách thức: nguy cơ đánh mất bản sắc văn hóa dân tộc khi hội nhập quốc tế.'},
+{l:'#3',q:'Thành tựu lớn của hoạt động đối ngoại từ 1986 đến nay là',o:['Nhận viện trợ quân sự to lớn từ Nga','Vị thế, uy tín của VN ngày càng nâng cao','Có hơn mười nước là đối tác chiến lược toàn diện','Đang ứng cử ghế ủy viên thường trực HĐBA'],a:1,e:'Thành tựu lớn nhất: vị thế và uy tín của Việt Nam ngày càng được nâng cao.'},
+{l:'#3',q:'Để thực hiện "VN muốn làm bạn với tất cả các nước", đối ngoại cần tuân thủ nguyên tắc',o:['Liên kết với các nước Đông Âu cũ','Cân bằng mối quan hệ giữa hai cực','Không vi phạm chủ quyền dân tộc','Không đổi môi trường lấy kinh tế'],a:2,e:'Nguyên tắc quan trọng nhất: không vi phạm chủ quyền dân tộc trong mọi hoạt động đối ngoại.'},
+{l:'#3',q:'Điểm giống nhau giữa Hiệp định Giơ-ne-vơ (1954) và Hiệp định Pa-ri (1973) là',o:['Đều buộc đế quốc chấm dứt xâm lược, rút quân','Là văn bản pháp lý ghi nhận các quyền tự do cơ bản','Công nhận miền Nam có hai chính quyền, hai quân đội','Thỏa thuận ngừng bắn, chuyển quân, tập kết'],a:0,e:'Điểm giống nhau: đều buộc đế quốc chấm dứt xâm lược và rút hết quân về nước.'},
+{l:'#3',q:'Điểm khác nhau giữa đối ngoại 1945-1975 và từ 1986 đến nay là',o:['Mục tiêu đấu tranh là giải phóng dân tộc','Nguyên tắc thực hiện hoạt động đối ngoại','Các nước thâm cấp cao đến Trung Quốc','Đặt dưới sự lãnh đạo tuyệt đối của Đảng'],a:0,e:'Điểm khác: 1945-1975 mục tiêu là giải phóng dân tộc; từ 1986 là hội nhập phát triển.'},
+{l:'#3',q:'Điểm giống nhau giữa đối ngoại 1945-1975 và từ 1986 đến nay là',o:['Mục tiêu đấu tranh giải phóng dân tộc','Kết hợp chặt chẽ với đấu tranh quân sự','Phục vụ lợi ích cho dân tộc Việt Nam','Liên kết chặt chẽ với các nước Đông Âu'],a:2,e:'Điểm giống nhau quan trọng nhất: đều phục vụ lợi ích cho dân tộc Việt Nam.'},
+{l:'#3',q:'Kháng chiến chống Mỹ 1954-1975, VN chủ yếu phát triển quan hệ với',o:['Trung Quốc, LX và các nước XHCN','Trung Quốc, LX và các nước Tây Âu','Liên Xô và các nước Đông Nam Á','Trung Quốc và các nước Đông Nam Á'],a:0,e:'Kháng chiến chống Mỹ: VN củng cố quan hệ với Trung Quốc, Liên Xô và các nước XHCN.'},
+{l:'#3',q:'Hạn chế trong Hiệp định Giơ-ne-vơ 1954 được khắc phục trong Hiệp định Pa-ri 1973 là',o:['Chuyển quân, tập kết','Ba lực lượng chính trị','Hai vùng kiểm soát','Giám sát quốc tế'],a:2,e:'Hiệp định Pa-ri khắc phục hạn chế "hai vùng kiểm soát" của Hiệp định Giơ-ne-vơ.'},
+{l:'#4',q:'Thời kỳ 1945–1954, đối ngoại VNDCCH có tác dụng',o:['Trực tiếp đánh bại thực dân Pháp','Xây dựng thành công nhà nước mới','Nâng cao uy tín địa vị quốc gia','Đánh bại chủ nghĩa thực dân của Mỹ'],a:2,e:'1945-1954, đối ngoại nâng cao uy tín địa vị quốc gia, tạo thế và lực cho kháng chiến.'},
+{l:'#4',q:'Nhận xét đúng về Hiệp định Pa-ri (1973) là',o:['Kết quả của cuộc đấu tranh ngoại giao dài nhất, khó khăn nhất','Thắng lợi chung của khối XHCN trước âm mưu của Mỹ','Hiệp định đầu tiên ghi nhận quyền dân tộc cơ bản của VN','Thời cơ trực tiếp để nhân dân tiến lên giải phóng miền Nam'],a:0,e:'Hiệp định Pa-ri là kết quả của cuộc đấu tranh ngoại giao dài nhất và khó khăn nhất.'},
+{l:'#4',q:'Nhận xét đúng về vai trò đối ngoại từ 1986 đến nay là',o:['Tạo ưu thế cho tranh chấp quân sự trên biển Đông','Tất cả các nước nâng tầm quan hệ ngoại giao với VN','Đưa VN trở thành cường quốc số một châu Á','Tạo điều kiện cho VN hội nhập, phát triển kinh tế'],a:3,e:'Từ 1986, đối ngoại tạo điều kiện cho VN hội nhập quốc tế và phát triển kinh tế.'},
+{l:'#4',q:'Bài học kinh nghiệm xuyên suốt các thắng lợi trong đối ngoại từ 1945 đến nay là',o:['Kiên trì sự lãnh đạo tuyệt đối của Đảng','Tăng cường củng cố sức mạnh quân sự','Thực hiện đoàn kết chặt chẽ với Liên Xô','Tham gia vào các khối liên minh quân sự'],a:0,e:'Bài học xuyên suốt: kiên trì sự lãnh đạo tuyệt đối của Đảng là quyết định thành công.'},
+{l:'#4',q:'Chủ trương đối ngoại VN vận dụng trong kháng chiến chống Mỹ là',o:['Ngoại giao đi trước, quân sự hỗ trợ','Phối hợp mặt trận chính diện và sau lưng địch','Kết hợp đấu tranh quân sự với đấu tranh vũ trang','Vừa đánh vừa đàm, vừa đàm vừa đánh'],a:3,e:'Chủ trương chiến lược: "Vừa đánh vừa đàm, vừa đàm vừa đánh" trong kháng chiến chống Mỹ.'},
+{l:'#4',q:'Từ thắng lợi Pa-ri (1973), bài học kinh nghiệm cho ngoại giao hiện nay là',o:['Thực hiện đường lối ngoại giao độc lập, tự chủ','Tranh thủ tối đa sự ủng hộ của các cường quốc','Giải quyết tranh chấp bằng biện pháp hòa bình','Đa dạng hóa, đa phương hóa quan hệ quốc tế'],a:0,e:'Bài học từ Pa-ri: thực hiện đường lối ngoại giao độc lập, tự chủ là kim chỉ nam.'},
+];
 
-      // Phát nhạc sau user interaction
-      const playPromise = audio.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          // Hiển thị nút play thủ công cho mobile
-          showManualPlayButton();
-        });
-      }
+// ── BÀI 14 ──────────────────────────────────────────────
+const B14 = [
+{l:'#1',q:'Cuối thế kỉ XIX, hoàn cảnh nào ảnh hưởng đến cuộc đời và sự nghiệp của Hồ Chí Minh?',o:['Thực dân Pháp đặt được ách cai trị trên toàn lãnh thổ VN','Phong trào đấu tranh theo khuynh hướng vô sản diễn ra rộng khắp','Cách mạng VN đi theo con đường cách mạng vô sản','Thực dân Pháp hoàn thành khai thác thuộc địa lần thứ nhất'],a:0,e:'Cuối XIX, Pháp đặt ách cai trị toàn VN – hoàn cảnh đất nước ảnh hưởng trực tiếp đến HCM.'},
+{l:'#1',q:'Nội dung nào KHÔNG đúng về Nghệ An – quê hương của Hồ Chí Minh?',o:['Diễn ra nhiều phong trào đấu tranh chống thực dân Pháp','Cư dân có truyền thống hiếu học và khoa bảng','Trung tâm công nghiệp lớn nhất cả nước','Là nơi sản sinh ra nhiều danh nhân'],a:2,e:'Nghệ An không phải trung tâm công nghiệp lớn nhất – đây là nội dung không đúng.'},
+{l:'#1',q:'Hoàn cảnh gia đình đúng ảnh hưởng đến cuộc đời Hồ Chí Minh là',o:['Thân mẫu từng thi đỗ cử nhân tại trường thi Nghệ An','Thân phụ là tấm gương sáng về ý chí vượt khó','Thân phụ tham gia khởi xướng phong trào Đông du','Thân phụ tích cực tham gia cuộc vận động Duy tân'],a:3,e:'Thân phụ (Nguyễn Sinh Sắc) tích cực tham gia cuộc vận động Duy tân.'},
+{l:'#1',q:'Nội dung nào KHÔNG PHẢI là truyền thống quý báu của dân tộc Việt Nam?',o:['Yêu nước','Đoàn kết','Nhân nghĩa','Hiếu chiến'],a:3,e:'Hiếu chiến không phải truyền thống của dân tộc Việt Nam – một dân tộc yêu hòa bình.'},
+{l:'#1',q:'Phẩm chất tốt đẹp của xứ Nghệ HCM tiếp thu và thể hiện rõ nét là',o:['Trọng nghĩa khinh tài','Ý chí trong học tập','Giỏi nghề thủ công','Kinh nghiệm đi biển'],a:0,e:'Phẩm chất "trọng nghĩa khinh tài" của xứ Nghệ được HCM tiếp thu và thể hiện suốt đời.'},
+{l:'#1',q:'Chủ tịch Hồ Chí Minh sinh ra trong một gia đình',o:['Có truyền thống yêu nước','Có kinh nghiệm đi biển','Nông dân rất nghèo khổ','Công nhân kỹ thuật cao'],a:0,e:'HCM sinh ra trong gia đình có truyền thống yêu nước và học vấn (thân phụ đỗ Phó bảng).'},
+{l:'#1',q:'Một trong những ngôi trường Chủ tịch HCM từng theo học là',o:['Hoàng Phố','Đồng Khánh','Quốc Tử Giám','Quốc học Huế'],a:3,e:'HCM theo học tại trường Quốc học Huế – một trường danh tiếng thời bấy giờ.'},
+{l:'#1',q:'Năm 1919, Nguyễn Tất Thành tham gia vào tổ chức nào?',o:['Đảng Cộng sản Pháp','Đảng Bảo thủ Anh','Đảng Xã hội Pháp','Đảng Cộng hòa Mỹ'],a:2,e:'Năm 1919, Nguyễn Tất Thành gia nhập Đảng Xã hội Pháp (SFIO).'},
+{l:'#1',q:'Từ đầu thế kỷ XX, mâu thuẫn giữa nhân dân Việt Nam với thực dân Pháp ngày càng',o:['Gay gắt','Hòa giải','Hòa dịu','Ổn định'],a:0,e:'Mâu thuẫn giữa nhân dân VN với thực dân Pháp ngày càng gay gắt, không thể điều hòa.'},
+{l:'#1',q:'Một trong những ngôi trường Nguyễn Tất Thành từng dạy học là',o:['Nam Đàn','Đồng Khánh','Quốc học Huế','Dục Thanh'],a:3,e:'Nguyễn Tất Thành từng dạy học tại trường Dục Thanh ở Phan Thiết năm 1910.'},
+{l:'#1',q:'Năm 1910, Nguyễn Tất Thành dạy học tại',o:['Trường Tiểu học Pháp – Việt Đông Ba','Trường Quốc Học Huế','Trường Dục Thanh ở Phan Thiết','Trường làng tại Nghệ An'],a:2,e:'Năm 1910, Nguyễn Tất Thành dạy học tại Trường Dục Thanh ở Phan Thiết.'},
+{l:'#1',q:'Cuối năm 1924, Nguyễn Ái Quốc rời Liên Xô đến',o:['Thái Lan','Việt Nam','Trung Quốc','Đông Đức'],a:2,e:'Cuối 1924, Nguyễn Ái Quốc rời LX đến Quảng Châu, Trung Quốc để hoạt động cách mạng.'},
+{l:'#1',q:'Trước khi bị biến thành thuộc địa nửa phong kiến, Việt Nam là quốc gia',o:['Tự do','Độc lập','Dân chủ','Giàu có'],a:1,e:'Trước khi bị Pháp xâm lược, Việt Nam là quốc gia độc lập, có chủ quyền.'},
+{l:'#1',q:'Ngày 5/6/1911, Nguyễn Tất Thành rời bến cảng Nhà Rồng với tên gọi mới là',o:['Văn Ba','Ông Ké','Thầu Chín','Lý Thụy'],a:0,e:'Ngày 5/6/1911, Nguyễn Tất Thành lấy tên Văn Ba, làm phụ bếp trên tàu Latouche-Tréville.'},
+{l:'#1',q:'Một trong những hoạt động của Nguyễn Ái Quốc ở Pháp những năm 1919-1923 là',o:['Triệu tập Hội nghị hợp nhất các tổ chức cộng sản','Soạn thảo Chính cương Đảng Cộng sản Đông Dương','Tham gia sáng lập Hội Liên hiệp thuộc địa ở Pari','Soạn thảo Sách lược Đảng Cộng sản Đông Dương'],a:2,e:'1919-1923 ở Pháp, NAQ tham gia sáng lập Hội Liên hiệp các dân tộc thuộc địa ở Pari.'},
+{l:'#1',q:'Từ 1911 đến 1919, Nguyễn Ái Quốc có hoạt động tiêu biểu nào?',o:['Gửi bản Yêu sách của nhân dân An Nam đến Hội nghị Véc-xai','Tham gia hoạt động trong Quốc tế Cộng sản','Tham gia sáng lập Đảng Cộng sản Pháp','Bỏ phiếu tán thành Quốc tế thứ nhất'],a:0,e:'Năm 1919, NAQ gửi Yêu sách 8 điểm của nhân dân An Nam đến Hội nghị Véc-xai.'},
+{l:'#1',q:'Từ 1911 đến 1920, Nguyễn Ái Quốc đã có hoạt động nào?',o:['Triệu tập và chủ trì Hội nghị hợp nhất các tổ chức cộng sản','Thành lập Hội VNCMTN và xuất bản báo Thanh niên','Đọc Sơ thảo lần thứ nhất những luận cương của Lê-nin','Đọc Tuyên ngôn Độc lập, khai sinh nước VNDCCH'],a:2,e:'7/1920, NAQ đọc Sơ thảo luận cương của Lê-nin trên báo Nhân Đạo – tìm ra con đường cứu nước.'},
+{l:'#1',q:'Sự kiện gắn với hoạt động của Nguyễn Ái Quốc khi ở Liên Xô là',o:['Viết bài cho báo Thanh niên','Viết Bản án chế độ thực dân Pháp','Tham gia sáng lập Đảng Cộng sản','Dự đại hội lần V của Quốc tế cộng sản'],a:3,e:'Khi ở LX, NAQ dự Đại hội lần V Quốc tế cộng sản (1924) và được cử về phương Đông công tác.'},
+{l:'#1',q:'Đầu năm 1930, Nguyễn Ái Quốc đã có hoạt động nào?',o:['Thành lập Mặt trận Việt Minh','Soạn thảo Luận cương chính trị','Trở về nước lãnh đạo cách mạng','Hợp nhất các tổ chức cộng sản'],a:3,e:'Đầu năm 1930, NAQ triệu tập và chủ trì Hội nghị hợp nhất ba tổ chức cộng sản Việt Nam.'},
+{l:'#1',q:'Nguyễn Ái Quốc trở về VN trực tiếp lãnh đạo cách mạng vào thời gian nào?',o:['Đầu năm 1941','Cuối năm 1941','Đầu năm 1942','Cuối năm 1942'],a:0,e:'Đầu năm 1941, NAQ về nước sau 30 năm bôn ba nước ngoài, trực tiếp lãnh đạo cách mạng.'},
+{l:'#1',q:'Hình thái giành chính quyền được xác định tại Hội nghị TW8 Đảng CSĐD (5-1941) là',o:['Lãn công, biểu tình đòi tăng lương giảm giờ làm','Khởi nghĩa vũ trang kết hợp mít tinh biểu tình','Tiến hành Tổng khởi nghĩa ở các địa phương','Đi từ khởi nghĩa từng phần tiến lên Tổng khởi nghĩa'],a:3,e:'HN TW8 (5-1941) xác định: đi từ khởi nghĩa từng phần tiến lên Tổng khởi nghĩa toàn quốc.'},
+{l:'#1',q:'Tại Hội nghị TW8 ĐCSĐD (5-1941), Nguyễn Ái Quốc đưa ra sáng kiến thành lập',o:['Hội Liên Việt','Mặt trận Việt Minh','Mặt trận Liên Việt','Liên minh Việt – Miên – Lào'],a:1,e:'HN TW8 (5-1941), NAQ sáng lập Mặt trận Việt Minh để tập hợp lực lượng toàn quốc.'},
+{l:'#1',q:'Tháng 6-1945, Hồ Chí Minh ra chỉ thị thành lập',o:['Khu giải phóng Việt Bắc','Khu giải phóng Việt Nam','Khu giải phóng Tân Trào','Khu giải phóng Tuyên Quang'],a:0,e:'Tháng 6-1945, HCM ra chỉ thị thành lập Khu giải phóng Việt Bắc.'},
+{l:'#1',q:'Ngày 22-12-1944, HCM ra chỉ thị thành lập lực lượng vũ trang nào?',o:['Mặt trận Dân tộc Giải phóng miền Nam VN','Đội Việt Nam Tuyên truyền Giải phóng quân','Quân đội nhân dân Việt Nam','Đội Việt Nam Giải phóng quân'],a:1,e:'22/12/1944, HCM ra chỉ thị thành lập Đội Việt Nam Tuyên truyền Giải phóng quân – tiền thân QĐND.'},
+{l:'#2',q:'Nhiệm vụ cấp bách nhất cho dân tộc VN những năm cuối XIX đầu XX là',o:['Giành độc lập dân tộc','Đòi dân sinh dân chủ','Cách mạng ruộng đất','Cơm áo và hòa bình'],a:0,e:'Nhiệm vụ cấp bách nhất: giành độc lập dân tộc, đánh đuổi thực dân Pháp xâm lược.'},
+{l:'#2',q:'Mâu thuẫn chủ yếu trong xã hội Việt Nam đầu thế kỷ XX là',o:['Dân tộc','Giai cấp','Tầng lớp','Tôn giáo'],a:0,e:'Mâu thuẫn chủ yếu: mâu thuẫn dân tộc giữa nhân dân VN với thực dân Pháp xâm lược.'},
+{l:'#2',q:'Tháng 12-1920, Nguyễn Ái Quốc đã trở thành',o:['Người cộng sản đầu tiên của Việt Nam','Lãnh tụ tối cao của cách mạng VN','Ủy viên Ban chấp hành Quốc tế cộng sản','Phái viên của Quốc tế cộng sản ở châu Phi'],a:0,e:'12/1920, tại Đại hội Tua, NAQ bỏ phiếu gia nhập QT III – trở thành người cộng sản đầu tiên của VN.'},
+{l:'#2',q:'Tổ chức do Nguyễn Ái Quốc thành lập, được xem là tiền thân của ĐCSVN là',o:['Đông Dương Cộng sản liên đoàn','Đông Dương Cộng sản đảng','Hội Việt Nam Cách mạng thanh niên','Hội Liên hiệp các dân tộc thuộc địa'],a:2,e:'Hội VNCMTN (1925) do NAQ thành lập là tổ chức tiền thân trực tiếp của ĐCSVN.'},
+{l:'#2',q:'Vì sao đầu 1930, Nguyễn Ái Quốc triệu tập hội nghị hợp nhất các tổ chức cộng sản?',o:['Cách mạng VN đứng trước nguy cơ chia rẽ','Sự chỉ đạo trực tiếp của lãnh đạo QT cộng sản','Yêu cầu thiết tha của nhân dân ba nước Đông Dương','Các tổ chức cộng sản yêu cầu tiến hành hợp nhất'],a:0,e:'Cách mạng VN đứng trước nguy cơ chia rẽ do ba tổ chức cộng sản hoạt động phân tán.'},
+{l:'#2',q:'Ý nghĩa của sự ra đời ĐCSVN đầu năm 1930 là',o:['Đưa CMVN chuyển sang giai đoạn tiến lên CNXH','Giai cấp công nhân VN chuyển sang đấu tranh tự giác','Mở ra thời kì giải phóng dân tộc dưới lãnh đạo giai cấp tư sản','Chấm dứt thời kì khủng hoảng đường lối cứu nước'],a:3,e:'Sự ra đời ĐCSVN chấm dứt thời kì khủng hoảng về đường lối cứu nước (hơn nửa thế kỷ).'},
+{l:'#2',q:'Nguyên nhân Nguyễn Tất Thành quyết định sang phương Tây tìm đường cứu nước là',o:['Tìm hiểu các nước phương Tây làm như thế nào','Con đường sang phương Tây dễ dàng hơn','Phương Tây có nhiều trường Đại học danh tiếng','Mục đích chính là ra đi để lao động, kiếm sống'],a:0,e:'NAQ sang phương Tây để tìm hiểu kẻ thù làm như thế nào, rồi trở về giúp đồng bào.'},
+{l:'#2',q:'Biểu hiện nào cho thấy Nguyễn Tất Thành sớm có tư tưởng yêu nước chống Pháp?',o:['Tham gia phong trào chống thuế ở Huế','Tham gia phong trào Đông Du đi sang Nhật','Tham gia phong trào Cần Vương ở Nghệ An','Tập hợp các sỹ phu ở Nghệ An đánh Pháp'],a:0,e:'NTT tham gia phong trào chống thuế ở Huế (1908) – biểu hiện sớm có tư tưởng yêu nước.'},
+{l:'#2',q:'Một trong những nguyên nhân thành công của hội nghị hợp nhất (đầu 1930) là',o:['Tài năng, uy tín của Nguyễn Ái Quốc','Chỉ đạo kịp thời của Quốc tế thứ hai','Nguyện vọng thiết tha của quần chúng','Những bài học kinh nghiệm trên thế giới'],a:0,e:'Nguyên nhân quan trọng nhất: tài năng, uy tín và bản lĩnh của Nguyễn Ái Quốc.'},
+{l:'#3',q:'Điểm khác biệt trong con đường cứu nước của Nguyễn Ái Quốc và Phan Bội Châu là',o:['Hết lòng cho sự nghiệp cách mạng','Coi trọng tầng lớp thanh niên, trí thức','Nguyễn Ái Quốc đi sang phương Tây','Hướng tới mục tiêu giải phóng dân tộc'],a:2,e:'Điểm khác biệt: NAQ hướng sang phương Tây để tìm hiểu kẻ thù; PBC hướng sang phương Đông (Nhật).'},
+{l:'#3',q:'Điểm khác biệt trong con đường cứu nước của Nguyễn Ái Quốc và Phan Châu Trinh là',o:['Mục tiêu giải phóng dân tộc Việt Nam','Cống hiến hết mình cho cách mạng','Khuynh hướng cách mạng cứu nước','Ý chí mãnh liệt, muốn đất nước độc lập'],a:2,e:'Điểm khác biệt: NAQ theo khuynh hướng cách mạng vô sản; PCT theo khuynh hướng dân chủ tư sản.'},
+{l:'#3',q:'Điểm giống nhau về vai trò của HCM giai đoạn 1945-1954 và 1960-1969 là',o:['Là lãnh tụ tối cao của cách mạng Việt Nam','Người đứng đầu Chính phủ nước Việt Nam','Trực tiếp ra mặt trận chỉ huy bộ đội','Lãnh đạo, điều hành Quốc hội nước VN'],a:0,e:'Ở cả hai giai đoạn, HCM đều là lãnh tụ tối cao của cách mạng Việt Nam.'},
+{l:'#3',q:'Điểm chung của HCM khi so sánh với Jeanne d\'Arc, Gandhi là',o:['Cống hiến trọn đời mình cho dân tộc','Chủ tịch nước đầu tiên sau cách mạng','Đấu tranh ôn hòa để giải phóng dân tộc','Danh nhân văn hóa lớn của nhân loại'],a:0,e:'Điểm chung: cả ba đều cống hiến trọn đời mình cho sự nghiệp giải phóng dân tộc.'},
+{l:'#3',q:'Mục đích tìm đường cứu nước của Nguyễn Ái Quốc khác các bậc tiền bối ở chỗ',o:['Đến Nhật Bản để tiếp thu tư tưởng dân chủ tư sản','Đi sang phương Tây để tiếp thu nền văn minh Pháp','Đi sang phương Tây, tìm hiểu kẻ thù để giúp đồng bào','Đi qua nhiều nước để cảm thông đời sống nhân dân'],a:2,e:'NAQ đi sang phương Tây để tìm hiểu kẻ thù làm gì, từ đó tìm cách giúp đồng bào giải phóng.'},
+{l:'#3',q:'Con đường giải phóng dân tộc của NAQ (hình thành những năm 20 thế kỷ XX) khác biệt về',o:['Lực lượng cách mạng','Khuynh hướng chính trị','Đối tượng cách mạng','Mục tiêu trước mắt'],a:1,e:'Khác biệt hoàn toàn về khuynh hướng chính trị: theo khuynh hướng vô sản thay vì tư sản.'},
+{l:'#4',q:'Nội dung KHÔNG đúng khi nói đánh giá của nhân dân thế giới về HCM là',o:['Anh hùng giải phóng dân tộc','Chiến sỹ cộng sản kiên cường','Danh nhân văn hóa thế giới','Nhà dân tộc chủ nghĩa hẹp hòi'],a:3,e:'"Nhà dân tộc chủ nghĩa hẹp hòi" không đúng – HCM là nhà nhân đạo lớn, yêu chuộng hòa bình.'},
+];
 
-      heart.classList.add('fly-up');
-      heartContainer.style.opacity = '0';
-      setTimeout(() => {
-        heart.style.display = 'none';
-        heartContainer.style.display = 'none';
-        letter.classList.add('show');
-        typeWriter();
-      }, 1000);
+// ── BÀI 15 ──────────────────────────────────────────────
+const B15 = [
+{l:'#1',q:'Năm 1911, Nguyễn Tất Thành ra đi tìm đường cứu nước từ',o:['Bến cảng Nhà Rồng','Biên giới phía Bắc','Địa đầu Móng Cái','Bến tàu Thuận An'],a:0,e:'Ngày 5/6/1911, Nguyễn Tất Thành rời bến cảng Nhà Rồng (Sài Gòn) ra đi tìm đường cứu nước.'},
+{l:'#1',q:'Cuối 1929 – đầu 1930, Nguyễn Ái Quốc triệu tập hội nghị với cương vị',o:['Thành viên đoàn cố vấn quân sự','Lãnh đạo của Quốc tế Cộng sản','Lãnh đạo tối cao của cách mạng','Phái viên của Quốc tế Cộng sản'],a:3,e:'NAQ triệu tập hội nghị hợp nhất với cương vị phái viên của Quốc tế Cộng sản.'},
+{l:'#1',q:'Tư tưởng cốt lõi của Cương lĩnh chính trị tháng 2 năm 1930 là',o:['Độc lập dân tộc','Độc lập, tự do','Dân sinh, dân chủ','Cơm áo, hòa bình'],a:1,e:'Tư tưởng cốt lõi của Cương lĩnh chính trị tháng 2/1930: độc lập – tự do cho dân tộc.'},
+{l:'#1',q:'Ngày 19-12-1946, Chủ tịch Hồ Chí Minh đã đưa ra',o:['Lời kêu gọi toàn quốc chống Mỹ','Lời kêu gọi toàn quốc kháng chiến','Quân lệnh số 1','Tuyên ngôn Độc lập'],a:1,e:'19/12/1946, HCM ra Lời kêu gọi toàn quốc kháng chiến chống thực dân Pháp trở lại xâm lược.'},
+{l:'#1',q:'Từ năm 1920, con đường cứu nước NAQ lựa chọn là',o:['Theo khuynh hướng dân chủ tư sản','Đấu tranh vũ trang kết hợp bãi công, biểu tình','Kêu gọi sự ủng hộ từ các nước khác','Theo khuynh hướng cách mạng vô sản'],a:3,e:'Từ 1920, sau khi đọc Luận cương Lê-nin, NAQ xác định theo con đường cách mạng vô sản.'},
+{l:'#1',q:'Tháng 8-1945, HCM cùng ĐCS Đông Dương đã',o:['Tổ chức Hội nghị Ban Chấp hành TW lần thứ 8','Thành lập Mặt trận Việt Minh và Liên Việt','Phát động toàn dân Tổng khởi nghĩa giành chính quyền','Thành lập Đội VN Tuyên truyền Giải phóng quân'],a:2,e:'Tháng 8/1945, HCM và ĐCS Đông Dương phát động toàn dân Tổng khởi nghĩa – CMT8 thắng lợi.'},
+{l:'#2',q:'Vì sao NAQ bỏ phiếu tán thành Quốc tế thứ III?',o:['Quốc tế này bênh vực cho quyền lợi các nước thuộc địa','Quốc tế này giúp nhân dân ta đấu tranh chống Pháp','Quốc tế này đề ra đường lối cho Cách mạng VN','Quốc tế này chủ trương thành lập mặt trận giải phóng dân tộc'],a:0,e:'NAQ tán thành QTIII vì Quốc tế này kiên quyết bênh vực quyền lợi của các dân tộc thuộc địa.'},
+{l:'#2',q:'Ý nghĩa sự kiện NAQ tìm ra con đường cứu nước năm 1920 là',o:['Đưa cách mạng VN theo khuynh hướng tư sản','Mở ra con đường cứu nước theo khuynh hướng dân chủ vô sản','Bước đầu giải quyết khủng hoảng về đường lối giải phóng dân tộc','Chuẩn bị đủ điều kiện cho thành lập Đảng Cộng sản Đông Dương'],a:2,e:'1920, tìm ra con đường cứu nước bước đầu giải quyết khủng hoảng về đường lối giải phóng dân tộc.'},
+{l:'#2',q:'Nội dung thể hiện NAQ chuẩn bị về tư tưởng chính trị cho ra đời ĐCSVN là',o:['Mở lớp huấn luyện đào tạo cán bộ tại Trung Quốc','Chủ nhiệm kiêm chủ bút báo Nhân đạo, Đời sống công nhân','Xây dựng lí luận về đi lên CNXH ở miền Bắc','Đào tạo cán bộ thực hiện các cuộc khởi nghĩa vũ trang'],a:1,e:'Làm chủ nhiệm, chủ bút báo Nhân đạo và Đời sống công nhân để truyền bá chủ nghĩa Mác-Lê.'},
+{l:'#2',q:'Nội dung KHÔNG PHẢI là ý nghĩa của việc thành lập ĐCSVN là',o:['Chấm dứt tình trạng khủng hoảng đường lối cứu nước','CMVN trở thành bộ phận của phong trào cách mạng thế giới','Đánh dấu bước ngoặt trong lịch sử cách mạng VN','VN được sự giúp đỡ của các nước XHCN'],a:3,e:'"VN được sự giúp đỡ của các nước XHCN" không phải ý nghĩa trực tiếp của sự thành lập Đảng.'},
+{l:'#2',q:'Ý nghĩa của sự ra đời và hoạt động Mặt trận Việt Minh trong chuẩn bị CMT8 là',o:['Thức tỉnh tinh thần giai cấp, khiến quân Nhật đầu hàng','Chấm dứt khủng hoảng đường lối cứu nước giải phóng dân tộc','Tập hợp và đoàn kết các lực lượng trong xã hội vào nhiệm vụ cứu nước','Chấm dứt khủng hoảng xây dựng tổ chức chính trị và lực lượng vũ trang'],a:2,e:'Mặt trận Việt Minh tập hợp và đoàn kết rộng rãi các lực lượng xã hội vào nhiệm vụ cứu nước.'},
+{l:'#2',q:'Một trong những nội dung con đường cứu nước NAQ xác định là',o:['Tiến hành làm cách mạng vô sản ở chính quốc trước','Thực hiện cả hai nhiệm vụ kháng chiến và kiến quốc','Giải phóng dân tộc gắn liền với giải phóng giai cấp','Muốn giành độc lập phải xây dựng quân đội mạnh'],a:2,e:'NAQ xác định: giải phóng dân tộc phải gắn liền với giải phóng giai cấp – độc đáo và sáng tạo.'},
+{l:'#2',q:'Vai trò của Nguyễn Ái Quốc trong Hội nghị Ban Chấp hành TW Đảng lần thứ 8 (5-1941) là',o:['Triệu tập và chủ trì','Thành viên tham dự','Quan sát viên dự bị','Chi phối hội nghị'],a:0,e:'HN TW8 (5/1941), NAQ triệu tập và chủ trì hội nghị – sáng lập Mặt trận Việt Minh.'},
+{l:'#2',q:'Tháng 12-1946, trước âm mưu xâm lược lại của Pháp, Chủ tịch HCM đã',o:['Ra lời kêu gọi Toàn quốc kháng chiến','Công bố chỉ thị Toàn dân kháng chiến','Đề ra đường lối kháng chiến đơn độc','Đến thăm Pháp để tranh thủ hòa hoãn'],a:0,e:'19/12/1946, trước âm mưu Pháp, HCM ra Lời kêu gọi Toàn quốc kháng chiến.'},
+{l:'#2',q:'Một trong những tổ chức cách mạng NAQ thành lập trong thời gian hoạt động ở nước ngoài là',o:['Hội Việt Nam cách mạng thanh niên (1925)','Đông Dương Cộng sản liên đoàn (1929)','Mặt trận Việt Nam Độc lập Đồng minh (1941)','Đội VN Tuyên truyền giải phóng quân (1944)'],a:0,e:'Hội Việt Nam cách mạng thanh niên (1925) được NAQ thành lập tại Quảng Châu, TQ.'},
+{l:'#2',q:'Một trong những công lao của Nguyễn Ái Quốc/HCM đối với dân tộc VN là',o:['Tìm ra con đường cứu nước','Tán thành gia nhập Quốc tế III','Thành lập Đảng Cộng sản Pháp','Đến tham dự tang lễ của Lê-nin'],a:0,e:'Công lao vĩ đại nhất: tìm ra con đường cứu nước đúng đắn cho dân tộc Việt Nam.'},
+{l:'#2',q:'Nguyên nhân thúc đẩy phong trào yêu nước, phong trào công nhân phát triển từ 1925 trở về sau là',o:['Hoạt động của Nguyễn Ái Quốc','Quá trình đàn áp dã man của Pháp','Cuộc khai thác thuộc địa lần hai','Cuộc khủng hoảng kinh tế thế giới'],a:0,e:'Hoạt động của NAQ (thành lập Hội VNCMTN, xuất bản báo, huấn luyện cán bộ) thúc đẩy phong trào.'},
+{l:'#2',q:'Lý luận cách mạng giải phóng dân tộc của NAQ được trình bày đầu tiên trong',o:['Chỉ thị Toàn dân kháng chiến','Bản án chế độ thực dân Pháp','Tác phẩm Đường kách mệnh','Cương lĩnh chính trị đầu tiên'],a:2,e:'Tác phẩm "Đường kách mệnh" (1927) trình bày đầu tiên lý luận cách mạng giải phóng dân tộc.'},
+{l:'#2',q:'"Lập ra đội chủ lực" là mục đích HCM khi chỉ thị thành lập tổ chức nào?',o:['Hội Liên hiệp các dân tộc bị áp bức ở Á Đông (7-1925)','Hội Việt Nam cách mạng thanh niên (6-1925)','Đội VN Tuyên truyền giải phóng quân (12-1944)','Mặt trận DTGP miền Nam VN (12-1960)'],a:2,e:'Mục đích thành lập ĐVNTTYG (12/1944): lập đội chủ lực, sau phát triển thành QĐND Việt Nam.'},
+{l:'#2',q:'Mục đích các chuyến thăm của HCM đến các nước XHCN giai đoạn 1954-1969 là',o:['Tranh thủ sự giúp đỡ, viện trợ','Xin tham gia vào khối Vác-sa-va','Lập ra liên minh để chống Mỹ','Xin chuyển giao công nghệ cao'],a:0,e:'Các chuyến thăm giai đoạn 1954-1969 nhằm tranh thủ sự giúp đỡ và viện trợ cho kháng chiến.'},
+{l:'#2',q:'Tháng 2-1945, HCM sang Côn Minh (Trung Quốc) với mục đích',o:['Đàm phán để quân Tưởng giải giáp Nhật','Bắt liên lạc với Đảng Cộng sản Trung Quốc','Tìm kiếm sự viện trợ của lực lượng Đồng minh','Xin tham gia sâu hơn vào khối Vác-sa-va'],a:2,e:'2/1945, HCM sang Côn Minh để tìm kiếm sự viện trợ của lực lượng Đồng minh chống phát xít.'},
+{l:'#3',q:'Một trong những nội dung NAQ rút ra trong quá trình hoạt động ở nước ngoài 1911-1941 là',o:['Phải xây dựng được nền kinh tế thị trường','Sự chèn ép của các nước tư bản đối với Nga','Phải giải phóng dân tộc ở chính quốc trước','Bản chất tàn bạo của chủ nghĩa thực dân'],a:3,e:'NAQ rút ra được: bản chất tàn bạo của chủ nghĩa thực dân đối với các dân tộc bị áp bức.'},
+{l:'#3',q:'Nội dung đúng về vai trò của HCM đối với cách mạng VN (1945-1969) là',o:['Lãnh tụ tối cao của cách mạng Việt Nam','Bí thư thứ nhất Ban Chấp hành TW','Tổng Bí thư đầu tiên của Đảng Cộng sản','Soạn thảo các bản Hiến pháp cho dân tộc'],a:0,e:'Từ 1945-1969, HCM là lãnh tụ tối cao của cách mạng VN (Chủ tịch Đảng, Chủ tịch nước).'},
+{l:'#3',q:'Nội dung KHÔNG PHẢI là cống hiến của NAQ đối với CMVN từ 1911-1930 là',o:['Tìm ra con đường cứu nước','Thành lập Đảng Cộng sản','Truyền bá chủ nghĩa Mác','Đề ra đường lối kháng chiến'],a:3,e:'"Đề ra đường lối kháng chiến" thuộc giai đoạn sau 1945 – không phải đóng góp 1911-1930.'},
+{l:'#3',q:'Con đường tìm chân lý cứu nước của NAQ mới và khác lớp người đi trước ở chỗ',o:['Gửi yêu sách đòi Pháp thừa nhận quyền dân tộc VN','Tiếp thu nền văn minh phương Tây để đất nước phú cường','Hướng về phương Tây, khảo sát thực tiễn, tìm hiểu cách mạng thế giới','Nhờ các nước phương Tây đào tạo lực lượng chống Pháp'],a:2,e:'Điểm mới: hướng về phương Tây, khảo sát thực tiễn nhiều nước để tìm ra chân lý cứu nước.'},
+{l:'#3',q:'Yếu tố quyết định NAQ lựa chọn con đường cứu nước theo xu hướng vô sản là',o:['Thắng lợi của cách mạng tháng Mười Nga 1917','Con đường cứu nước theo khuynh hướng tư sản thất bại','Những tác động của thời đại và cuộc cách mạng vô sản','Do trí tuệ và nhãn quan chính trị của Nguyễn Ái Quốc'],a:3,e:'Quyết định bởi trí tuệ và nhãn quan chính trị thiên tài của NAQ khi đọc Luận cương Lê-nin.'},
+{l:'#3',q:'Vai trò to lớn của HCM trong Cách mạng tháng Tám 1945 là',o:['Thực hiện hoạt động đối ngoại, tranh thủ ủng hộ quốc tế','Kêu gọi nhân dân thực hiện khởi nghĩa từng phần địa phương','Lãnh đạo toàn dân đứng lên giành chính quyền','Lãnh đạo các đô thị khởi nghĩa từng phần'],a:2,e:'Vai trò to lớn nhất của HCM trong CMT8: lãnh đạo toàn dân đứng lên giành chính quyền.'},
+{l:'#3',q:'Vai trò của HCM trong giai đoạn 1945-1946 là',o:['Ký với Mỹ Hiệp ước Việt - Mỹ','Ký với Pháp Hiệp định Giơ-ne-vơ','Ký với Mỹ Hiệp định Pa-ri','Ký với Pháp Hiệp định Sơ bộ'],a:3,e:'Giai đoạn 1945-1946, HCM ký với Pháp Hiệp định Sơ bộ (6/3/1946) và Tạm ước (14/9/1946).'},
+{l:'#3',q:'Vai trò HCM trong hoạt động ngoại giao 1954-1969 là',o:['Giữ vững quan điểm tự do, tự chủ của cách mạng ĐD','Khéo léo cân bằng quan hệ Mỹ - Trung Quốc','Khéo léo cân bằng quan hệ Liên Xô – Mỹ','Giữ vững đường lối độc lập, tự chủ của cách mạng VN'],a:3,e:'1954-1969, HCM kiên định giữ vững đường lối độc lập, tự chủ trong ngoại giao.'},
+{l:'#3',q:'Sự phân hóa của Hội VNCMTN thành hai tổ chức cộng sản (1929) chứng tỏ',o:['Giai cấp công nhân trưởng thành và đủ sức lãnh đạo cách mạng','Phong trào công nhân bước đầu chuyển từ tự phát sang tự giác','Khuynh hướng vô sản hoàn toàn chi phối phong trào yêu nước','Việc thành lập một chính đảng vô sản ở VN là cấp thiết'],a:3,e:'Sự phân hóa chứng tỏ việc thành lập một chính đảng vô sản ở VN là yêu cầu cấp thiết.'},
+{l:'#3',q:'Sáng tạo của NAQ trong chuẩn bị tổ chức để thành lập ĐCSVN (1919-1929) là',o:['Chủ nhiệm, chủ bút tờ báo Người cùng khổ để tuyên truyền','Xuất bản cuốn Đường Kách mệnh, gửi về nước tuyên truyền','Thành lập các tổ chức tiền cộng sản trước khi lập Đảng','Viết tác phẩm Bản án chế độ thực dân Pháp tố cáo Pháp'],a:2,e:'Sáng tạo: thành lập các tổ chức tiền cộng sản (Hội VNCMTN) làm bước chuẩn bị cho Đảng.'},
+{l:'#3',q:'Trong chuẩn bị tư tưởng, chính trị cho ĐCSVN (1919-1929), vai trò nổi bật của NAQ là',o:['Xây dựng lí luận giải phóng dân tộc gắn với giải phóng giai cấp','Thành lập tổ chức cộng sản từ phong trào công nhân tự giác','Ra báo Thanh niên phục vụ Hội LH các dân tộc bị áp bức ở Á Đông','Viết Cương lĩnh trước khi sáng lập Hội VNCMTN'],a:0,e:'NAQ xây dựng lý luận giải phóng dân tộc gắn với giải phóng giai cấp – đặc sắc và độc đáo.'},
+{l:'#4',q:'Nhận định đúng về sự kiện NAQ bỏ phiếu tán thành gia nhập QTCS và sáng lập ĐCSP (1920) là',o:['Đánh dấu NAQ tìm được con đường cứu nước','Tạo ra bước ngoặt vĩ đại trong lịch sử dân tộc VN','Thiết lập được quan hệ giữa cách mạng VN với thế giới','Quyết định bước ngoặt về sự chuyển biến tư tưởng'],a:3,e:'Sự kiện 1920 là quyết định mang tính bước ngoặt về sự chuyển biến tư tưởng của NAQ.'},
+];
+
+// ── BÀI 16 ──────────────────────────────────────────────
+const B16 = [
+{l:'#1',q:'Một trong những quốc gia ở châu Á đã dựng tượng đài Chủ tịch Hồ Chí Minh là',o:['Ấn Độ','Nê-pan','Bru-nây','Miến Điện'],a:0,e:'Ấn Độ là quốc gia châu Á đã dựng tượng đài Chủ tịch Hồ Chí Minh để tưởng nhớ Người.'},
+{l:'#1',q:'Một trong những quốc gia ở châu Âu đã dựng tượng đài Chủ tịch Hồ Chí Minh là',o:['Ấn Độ','Cuba','Nga','Mỹ'],a:2,e:'Nga (Liên Xô cũ) là quốc gia châu Âu đã dựng tượng đài Chủ tịch Hồ Chí Minh.'},
+{l:'#1',q:'Một trong những quốc gia ở châu Mỹ đã dựng tượng đài Chủ tịch Hồ Chí Minh là',o:['Canada','Cuba','Ecuador','Pê-ru'],a:1,e:'Cuba là quốc gia châu Mỹ đã dựng tượng đài Chủ tịch Hồ Chí Minh.'},
+{l:'#1',q:'Một trong những quốc gia có nhiều di tích gắn hoạt động của HCM trong quá trình tìm đường cứu nước (1911-1941) là',o:['Hàn Quốc','Canada','Pháp','Cu-ba'],a:2,e:'Pháp có nhiều di tích gắn với HCM trong quá trình tìm đường cứu nước.'},
+{l:'#1',q:'Quốc gia KHÔNG ghi dấu ấn HCM trong hành trình 1911-1920 là',o:['Mỹ','Anh','Nga','Pháp'],a:2,e:'Nga không ghi dấu ấn HCM từ 1911-1920; Người đến LX từ năm 1923.'},
+{l:'#1',q:'Năm 1976, thành phố nào được đổi tên là Thành phố Hồ Chí Minh?',o:['Sài Gòn - Gia Định','Hà - Nam - Ninh','Quảng Đà','Hậu Giang'],a:0,e:'Năm 1976, Sài Gòn – Gia Định được đổi tên thành Thành phố Hồ Chí Minh.'},
+{l:'#1',q:'Dân tộc đã lấy họ của Chủ tịch HCM làm họ chung cho tất cả mọi người là',o:['Vân Kiều','Xơ Đăng','Khơ-me','Ba Na'],a:0,e:'Dân tộc Vân Kiều đã lấy họ Hồ của Chủ tịch HCM làm họ chung của cả dân tộc mình.'},
+{l:'#1',q:'Loài cây nhân dân miền Nam kính dâng lên Chủ tịch Hồ Chí Minh là',o:['Nhãn lồng','Cam canh','Vải thiều','Vú sữa'],a:3,e:'Nhân dân miền Nam kính dâng lên Bác loài cây vú sữa – biểu tượng tình cảm của miền Nam.'},
+{l:'#1',q:'".... trong trái tim tôi". Từ còn thiếu là',o:['Miền Nam','Miền Trung','Nước Nga','Các đồng chí'],a:0,e:'"Miền Nam trong trái tim tôi" – câu nói nổi tiếng thể hiện tình cảm sâu nặng của Bác với miền Nam.'},
+{l:'#1',q:'Một trong những tác phẩm văn học đặc sắc viết về Chủ tịch HCM là',o:['Rừng xà nu','Búp sen xanh','Nhật ký trong tù','Thuyền và Biển'],a:1,e:'"Búp sen xanh" (Sơn Tùng) là tác phẩm văn học đặc sắc viết về thời niên thiếu của HCM.'},
+{l:'#1',q:'Năm 1987, tổ chức nào công nhận HCM là "Anh hùng giải phóng dân tộc, nhà văn hóa kiệt xuất"?',o:['UNESCO','UNICEF','ASEAN','NAFTA'],a:0,e:'Năm 1987, UNESCO thông qua Nghị quyết công nhận HCM là "Anh hùng GPDT, Danh nhân VH thế giới".'},
+{l:'#2',q:'Trong cuộc đời mình, Chủ tịch HCM có "ham muốn tột bậc" là',o:['VN sẽ trở thành cường quốc số 1','Vô sản các nước đoàn kết, đồng tâm lại','Độc lập, tự do cho nhân dân Việt Nam','Không còn cuộc chiến tranh nào diễn ra'],a:2,e:'"Ham muốn tột bậc" của HCM: "Tổ quốc được giải phóng, nhân dân được tự do, hạnh phúc".'},
+{l:'#2',q:'1954-1969, nguyện vọng tha thiết của nhân dân miền Nam sau "đánh cho Mỹ cút" là',o:['Được miễn thuế nông nghiệp','Được đón Bác vào thăm','Được ra thăm lăng Bác','Có một cuộc sống giàu có'],a:1,e:'Nguyện vọng tha thiết nhất của nhân dân miền Nam: được đón Bác Hồ vào thăm sau thống nhất.'},
+{l:'#2',q:'Sau khi HCM qua đời (9-1969), nhân dân miền Nam đã làm gì để tưởng nhớ Người?',o:['Tấn công chống chính quyền Diệm','Cử các đại biểu ra Bắc dâng hương','Xây dựng nhiều khu tưởng niệm','Đồng loạt đi đưa tang'],a:1,e:'Sau khi Bác mất, nhân dân miền Nam cử đại biểu ra Bắc dâng hương tưởng nhớ Người.'},
+{l:'#2',q:'Một trong những di sản thiêng liêng HCM để lại cho nhân dân Việt Nam là',o:['Bản Di chúc của Người','Lời Kêu gọi kháng chiến','Lăng Hồ Chí Minh','Quảng trường Hồ Chí Minh'],a:0,e:'Bản Di chúc của HCM là di sản thiêng liêng – cương lĩnh xây dựng đất nước sau thống nhất.'},
+{l:'#2',q:'Vì sao NAQ luôn được sự trân trọng giúp đỡ của nhiều nhân vật uy tín thế giới?',o:['Nhân cách cao đẹp của Người','Quốc tế cộng sản đã can thiệp','Do đề nghị hỗ trợ của Liên Xô','Do nguyện vọng của nhân dân'],a:0,e:'Nhân cách cao đẹp của NAQ là lý do Người được nhiều nhân vật uy tín thế giới trân trọng.'},
+{l:'#2',q:'Vì sao chúng ta cần học tập đạo đức, phong cách Hồ Chí Minh?',o:['Được thăng quan tiến chức','Tăng thu nhập và có địa vị','Hoàn thiện bản thân mình','Để được kết nạp vào Đảng'],a:2,e:'Học tập HCM để hoàn thiện bản thân mình – nâng cao phẩm chất đạo đức cá nhân và xã hội.'},
+{l:'#2',q:'Vì sao sau khi HCM qua đời (1969) Đảng và Nhà nước quyết định xây dựng lăng?',o:['Nguyện vọng của nhân dân cả nước','Yêu cầu của giới trí thức trên thế giới','Sự chỉ đạo của Trung Quốc, Liên Xô','Thực hiện quyết định của UNESCO'],a:0,e:'Xây lăng Bác xuất phát từ nguyện vọng thiêng liêng của nhân dân cả nước Việt Nam.'},
+{l:'#2',q:'Vì sao nhiều trí thức sau khi gặp HCM sẵn sàng từ bỏ vinh hoa phú quý dấn thân cách mạng?',o:['Dùng chức vụ, địa vị để lôi kéo','Bác cho họ thấy dân tộc, Tổ quốc là quan trọng nhất','Cuộc sống ở nước ngoài bị mật thám theo dõi','Điều kiện làm việc quá khó khăn sau CTTG II'],a:1,e:'Bác truyền cảm hứng để họ thấy dân tộc và Tổ quốc là quan trọng nhất trong cuộc đời.'},
+{l:'#2',q:'Mục đích của Bộ Chính trị khi phát động "Học tập và làm theo tấm gương đạo đức HCM" là',o:['Tăng khối đại đoàn kết với các lực lượng tiến bộ, dân chủ','Thể hiện sự đoàn kết với các nước XHCN','Tăng cường, củng cố quyền lãnh đạo tuyệt đối của Đảng','Phát huy giá trị to lớn của tư tưởng, đạo đức HCM'],a:3,e:'Mục đích: phát huy giá trị to lớn của tư tưởng và đạo đức Hồ Chí Minh trong thực tiễn.'},
+{l:'#2',q:'Trong hoạt động cách mạng, HCM viết văn, làm thơ với mục đích',o:['Trở thành nhà văn, nhà thơ nổi tiếng','Phục vụ nhân dân và cách mạng','Để thu hút sự ủng hộ của quốc tế','Đánh vào tâm lý giặc ngoại xâm'],a:1,e:'HCM sáng tác văn học, thơ ca đều vì mục đích phục vụ nhân dân và sự nghiệp cách mạng.'},
+{l:'#2',q:'Điểm thuận lợi khi Đảng và Nhà nước quyết định xây dựng lăng HCM là',o:['Đất nước đã hoàn toàn giải phóng','Sự ủng hộ to lớn của nhân dân','Tất cả nguyên vật liệu đều có sẵn','Tổ chức ASEAN giúp đỡ công nghệ'],a:0,e:'Thuận lợi lớn nhất: đất nước đã hoàn toàn giải phóng và thống nhất sau 1975.'},
+{l:'#2',q:'Những câu thơ "Nhà gác đơn sơ một góc vườn..." thể hiện phong cách đạo đức nào của HCM?',o:['Thật thà','Nhân nghĩa','Giản dị','Mạnh mẽ'],a:2,e:'Những câu thơ về nhà ở của Bác thể hiện phong cách giản dị – nét đặc sắc của HCM.'},
+{l:'#2',q:'Con đường nào được xem là biểu tượng cho khát vọng độc lập tự do và thống nhất Tổ quốc?',o:['Đường Hồ Chí Minh trên biển','Đường sắt Cao tốc Bắc Nam','Đường sắt trên cao ở Hà Nội','Đường quốc phòng ven biển'],a:0,e:'"Đường Hồ Chí Minh trên biển" – đường mòn Hồ Chí Minh là biểu tượng khát vọng thống nhất.'},
+{l:'#2',q:'Tại sao trong hoạt động cách mạng, NAQ – HCM liên tục thay đổi họ tên, bí danh?',o:['Tránh mật thám truy lùng','Cần viết nhiều loại hồ sơ','Quốc tế cộng sản yêu cầu','Tăng sự thu hút nhân dân'],a:0,e:'NAQ liên tục thay đổi bí danh để tránh mật thám các nước theo dõi, bảo đảm an toàn hoạt động.'},
+{l:'#2',q:'Nghị quyết 24C/18.65 ghi nhận HCM là "Anh hùng giải phóng dân tộc" là của tổ chức nào?',o:['Tổ chức Giáo dục, Khoa học và Văn hoá LHQ (UNESCO)','Hiệp hội các quốc gia Đông Nam Á (ASEAN)','Hội đồng Bảo an Liên hợp quốc','Quốc tế Cộng sản'],a:0,e:'UNESCO thông qua Nghị quyết 24C/18.65 ghi nhận HCM là "Anh hùng GPDT, Danh nhân VH thế giới".'},
+{l:'#2',q:'HCM sống mãi trong lòng nhân dân Việt Nam vì đã',o:['Cống hiến và hi sinh cả cuộc đời cho dân tộc VN','Để lại di sản to lớn trên lĩnh vực khoa học – kỹ thuật','Để lại di sản to lớn trên lĩnh vực văn học và khoa học','Huy động mọi nguồn lực để giúp đỡ người dân VN'],a:0,e:'HCM sống mãi vì cống hiến và hy sinh trọn cả cuộc đời 79 tuổi cho sự nghiệp dân tộc VN.'},
+{l:'#2',q:'Hình thức nào KHÔNG PHẢI sự vinh danh của nhân dân VN đối với HCM?',o:['Xây dựng nhiều công trình mang tên HCM: bảo tàng, nhà lưu niệm','Nhiều trường học, đường phố mang tên Nguyễn Ái Quốc, Hồ Chí Minh','HCM trở thành nguồn cảm hứng sáng tác trong văn học','HCM tiếp tục được nghiên cứu bởi giới sử học quốc tế'],a:3,e:'"Giới sử học quốc tế nghiên cứu" là hoạt động khoa học quốc tế, không phải vinh danh của nhân dân VN.'},
+{l:'#3',q:'Cuộc vận động "Học tập và làm theo tấm gương đạo đức HCM" có tác dụng',o:['Lan tỏa và mang lại những giá trị tích cực','Giảm bớt tỷ lệ thất nghiệp trong nhân dân','Thay đổi cơ cấu dân cư theo vùng kinh tế','Ổn định cuộc sống cho nhân dân vùng cao'],a:0,e:'Cuộc vận động này lan tỏa và mang lại những giá trị tích cực cho đời sống chính trị – xã hội.'},
+{l:'#3',q:'Điểm chung của các ông Nguyễn Sơn, Nguyễn Bình, Trần Đại Nghĩa sau khi gặp HCM là',o:['Cống hiến trọn cuộc đời mình cho đất nước','Được thụ phong quân hàm cấp Đại tướng','Trở thành lãnh đạo cao cấp trong Chính phủ','Từ người yêu nước trở thành người cộng sản'],a:0,e:'Điểm chung: sau khi gặp Bác, cả ba đều cống hiến trọn cuộc đời mình cho đất nước.'},
+{l:'#4',q:'"Tư tưởng HCM là nền tảng tư tưởng, kim chỉ nam cho mọi hành động của Đảng" là đúng hay sai?',o:['Sai, vì tư tưởng HCM không còn phù hợp thực tiễn cách mạng','Đúng, vì tư tưởng HCM là nền tảng lý luận cách mạng VN','Đúng, vì tư tưởng HCM là tài sản vô giá với nhân dân VN','Sai, vì Đảng xem chủ nghĩa Mác-Lênin là kim chỉ nam'],a:1,e:'Đúng – Tư tưởng HCM là nền tảng tư tưởng, kim chỉ nam cho Đảng, kết hợp với CN Mác-Lênin.'},
+{l:'#4',q:'Nhận định đúng về vị trí của HCM với phong trào cộng sản và công nhân quốc tế là',o:['Chủ tịch HCM là một chiến sĩ lỗi lạc','Người lãnh đạo cao nhất của Quốc tế cộng sản','Hoạch định đường lối cho các dân tộc thuộc địa','Biểu tượng cho nền hòa bình an ninh của thế giới'],a:0,e:'HCM là chiến sĩ lỗi lạc của phong trào cộng sản và công nhân quốc tế.'},
+{l:'#4',q:'Nhận xét "HCM là nhà lãnh đạo vĩ đại và kiên định" (I. Gandhi) là đúng hay sai?',o:['Đúng, vì cả cuộc đời Người chỉ mong hạnh phúc cho dân tộc','Sai, vì Bác đã có sự thay đổi lập trường từ yêu nước đến cộng sản','Đúng, vì khi thành lập Đảng Bác không thực hiện chỉ thị QT cộng sản','Sai, vì Bác chỉ kiên định với nhân dân VN, không quan tâm quốc tế'],a:0,e:'Đúng – HCM vĩ đại và kiên định vì cả cuộc đời chỉ có một ham muốn tột bậc: hạnh phúc cho dân tộc.'},
+];
+
+// ── MAIN LOGIC ──────────────────────────────────────────
+const ALL_DATA = {B13, B14, B15, B16};
+let pool = [], cur = 0, answered = [], correct = 0, wrong = 0, curLesson = 'ALL';
+
+function buildPool(lesson) {
+  curLesson = lesson;
+  if (lesson === 'ALL') {
+    pool = [...B13, ...B14, ...B15, ...B16];
+  } else {
+    pool = [...ALL_DATA[lesson]];
+  }
+  cur = 0;
+  answered = new Array(pool.length).fill(null);
+  correct = 0; wrong = 0;
+  updateStats();
+  render();
+}
+
+function updateStats() {
+  document.getElementById('s-total').textContent = pool.length;
+  document.getElementById('s-correct').textContent = correct;
+  document.getElementById('s-wrong').textContent = wrong;
+}
+
+function setLesson(lesson) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const map = {B13:'tab-b13', B14:'tab-b14', B15:'tab-b15', B16:'tab-b16', ALL:'tab-all'};
+  document.querySelector('.'+map[lesson]).classList.add('active');
+  document.getElementById('subtitle').textContent = lesson === 'ALL' ? 'Tất cả bài học' : LESSONS[lesson]?.name || '';
+  buildPool(lesson);
+}
+
+function render() {
+  if (!pool.length) return;
+  const q = pool[cur];
+  const pct = ((cur+1) / pool.length * 100).toFixed(1);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = (cur+1) + ' / ' + pool.length;
+
+  // Badges
+  const lvlEl = document.getElementById('b-lvl');
+  lvlEl.textContent = q.l;
+  lvlEl.className = 'badge badge-lvl' + q.l.replace('#','');
+
+  const lessonEl = document.getElementById('b-lesson');
+  const lkey = q.lesson || curLesson;
+  lessonEl.textContent = lkey === 'B13' ? 'Bài 13' : lkey === 'B14' ? 'Bài 14' : lkey === 'B15' ? 'Bài 15' : 'Bài 16';
+  lessonEl.className = 'badge badge-lesson badge-' + lkey.toLowerCase();
+
+  document.getElementById('b-num').textContent = (cur+1) + ' / ' + pool.length;
+  document.getElementById('qtext').textContent = q.q;
+
+  const optsEl = document.getElementById('opts');
+  optsEl.innerHTML = '';
+  q.o.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    const key = document.createElement('span');
+    key.className = 'opt-key';
+    key.textContent = ['A','B','C','D'][i];
+    const text = document.createElement('span');
+    text.textContent = o;
+    btn.appendChild(key);
+    btn.appendChild(text);
+
+    if (answered[cur] !== null) {
+      btn.disabled = true;
+      if (i === q.a) btn.classList.add('correct');
+      else if (i === answered[cur]) btn.classList.add('wrong');
+    } else {
+      btn.onclick = () => doAnswer(i);
     }
+    optsEl.appendChild(btn);
+  });
 
-    // tạo hiệu ứng tim / hoa rơi
-    function createFalling() {
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
-      petal.innerText = Math.random() > 0.5 ? '💖' : '🌸';
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = (5 + Math.random() * 5) + 's';
-      falling.appendChild(petal);
-      setTimeout(() => petal.remove(), 10000);
-    }
-    setInterval(createFalling, 300);
+  const expEl = document.getElementById('explain');
+  if (answered[cur] !== null) {
+    expEl.style.display = 'block';
+    expEl.textContent = '💡 ' + q.e;
+  } else {
+    expEl.style.display = 'none';
+  }
 
-    // typing effect
-    const fullMessage = 
-`Hôm nay là ngày Phụ nữ Việt Nam 20/10 
-mình chúc bạn luôn trẻ trung, tiền nhiều như kẹo, tình bền chặt như keo, dẻo dai như mèo và mịn màng trắng trẻo.
-`;
+  document.getElementById('btn-prev').style.display = cur > 0 ? '' : 'none';
+  document.getElementById('btn-next').style.display = answered[cur] !== null ? '' : 'none';
+  document.getElementById('btn-next').textContent = cur === pool.length - 1 ? 'Xem kết quả' : 'Tiếp →';
+  document.getElementById('nav-info').textContent = answered[cur] !== null ? (answered[cur] === q.a ? '✓ Đúng!' : '✗ Sai') : '';
+}
 
-    let i = 0;
-    let typingComplete = false;
+function doAnswer(i) {
+  if (answered[cur] !== null) return;
+  answered[cur] = i;
+  if (i === pool[cur].a) correct++;
+  else wrong++;
+  updateStats();
+  render();
+}
 
-    function typeWriter() {
-      if (i < fullMessage.length) {
-        msgEl.innerHTML += fullMessage.charAt(i);
-        i++;
-        setTimeout(typeWriter, 50);
-      } else {
-        typingComplete = true;
-        // Hiện đóa hoa nhỏ sau khi viết thư xong
-        setTimeout(() => {
-          smallFlower.classList.add('show');
-        }, 500);
-      }
-    }
+function go(d) {
+  if (d > 0 && cur === pool.length - 1) {
+    showScore(); return;
+  }
+  cur = Math.max(0, Math.min(pool.length - 1, cur + d));
+  render();
+}
 
-    // Tạo hiệu ứng pháo hoa
-    function createFirework(x, y) {
-      for (let i = 0; i < 50; i++) {
-        const firework = document.createElement('div');
-        firework.classList.add('firework');
-        
-        // Màu sắc ngẫu nhiên
-        const colors = ['#ff4d6d', '#ff8fa3', '#ffb3c1', '#ffccd5', '#ff758f', '#ff477e'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        firework.style.backgroundColor = color;
-        
-        // Vị trí ban đầu
-        firework.style.left = x + 'px';
-        firework.style.top = y + 'px';
-        
-        // Chuyển động ngẫu nhiên
-        const angle = Math.random() * Math.PI * 2;
-        const velocity = 2 + Math.random() * 3;
-        const vx = Math.cos(angle) * velocity;
-        const vy = Math.sin(angle) * velocity;
-        
-        document.body.appendChild(firework);
-        
-        // Animation
-        let posX = x;
-        let posY = y;
-        let opacity = 1;
-        
-        const animate = () => {
-          posX += vx;
-          posY += vy;
-          opacity -= 0.02;
-          
-          firework.style.left = posX + 'px';
-          firework.style.top = posY + 'px';
-          firework.style.opacity = opacity;
-          
-          if (opacity > 0) {
-            requestAnimationFrame(animate);
-          } else {
-            firework.remove();
-          }
-        };
-        
-        animate();
-      }
-    }
+function skipQ() {
+  if (cur < pool.length - 1) { cur++; render(); }
+}
 
-    // Khi click vào đóa hoa nhỏ
-    smallFlower.addEventListener('click', () => {
-      if (!typingComplete) return;
-      
-      // Ẩn lá thư và hoa nhỏ
-      letter.style.opacity = '0';
-      letter.style.transform = 'translateY(50px) scale(0.9)';
-      smallFlower.classList.remove('show');
-      
-      // Hiện đóa hoa lớn
-      setTimeout(() => {
-        bigFlower.classList.add('show');
-        
-        // Tạo hiệu ứng pháo hoa
-        for (let i = 0; i < 10; i++) {
-          setTimeout(() => {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-            createFirework(x, y);
-          }, i * 200);
-        }
-      }, 500);
-    });
+function showScore() {
+  const pct = Math.round(correct / pool.length * 100);
+  document.getElementById('qcard').innerHTML = `
+    <div style="text-align:center;padding:30px 16px">
+      <div class="score-circle" style="width:100px;height:100px;border-radius:50%;background:var(--blue-light);border:3px solid var(--blue-mid);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;flex-direction:column">
+        <div style="font-size:26px;font-weight:700;color:var(--blue)">${pct}%</div>
+        <div style="font-size:10px;color:var(--blue)">điểm số</div>
+      </div>
+      <div style="font-size:18px;font-weight:600;margin-bottom:8px">${pct >= 80 ? '🎉 Xuất sắc!' : pct >= 60 ? '👍 Khá tốt!' : '📚 Cần ôn thêm'}</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:24px">Bạn đã hoàn thành ${pool.length} câu hỏi</div>
+      <div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px">
+        <div style="padding:12px 20px;border-radius:var(--radius);border:1px solid var(--border);text-align:center;min-width:80px"><div style="font-size:22px;font-weight:700;color:var(--green)">${correct}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Đúng</div></div>
+        <div style="padding:12px 20px;border-radius:var(--radius);border:1px solid var(--border);text-align:center;min-width:80px"><div style="font-size:22px;font-weight:700;color:var(--red)">${wrong}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Sai</div></div>
+        <div style="padding:12px 20px;border-radius:var(--radius);border:1px solid var(--border);text-align:center;min-width:80px"><div style="font-size:22px;font-weight:700;color:var(--blue)">${pool.length - correct - wrong}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Bỏ qua</div></div>
+      </div>
+      <button class="btn primary" onclick="setLesson(curLesson)" style="margin-right:8px">Làm lại</button>
+      <button class="btn" onclick="setLesson('ALL')">Tất cả bài</button>
+    </div>`;
+  document.getElementById('nav').style.display = 'none';
+}
 
-    // Sự kiện touch cho mobile
-    smallFlower.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      if (!typingComplete) return;
-      
-      // Ẩn lá thư và hoa nhỏ
-      letter.style.opacity = '0';
-      letter.style.transform = 'translateY(50px) scale(0.9)';
-      smallFlower.classList.remove('show');
-      
-      // Hiện đóa hoa lớn
-      setTimeout(() => {
-        bigFlower.classList.add('show');
-        
-        // Tạo hiệu ứng pháo hoa
-        for (let i = 0; i < 10; i++) {
-          setTimeout(() => {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-            createFirework(x, y);
-          }, i * 200);
-        }
-      }, 500);
-    });
-
-    // Cho phép click bất kỳ đâu trên màn hình để hiện hoa lớn (sau khi đã có hoa nhỏ)
-    document.addEventListener('click', (e) => {
-      if (typingComplete && smallFlower.classList.contains('show')) {
-        const x = e.clientX;
-        const y = e.clientY;
-        createFirework(x, y);
-      }
-    });
-
-    // Sự kiện touch cho mobile
-    document.addEventListener('touchstart', (e) => {
-      if (typingComplete && smallFlower.classList.contains('show')) {
-        const touch = e.touches[0];
-        const x = touch.clientX;
-        const y = touch.clientY;
-        createFirework(x, y);
-      }
-    });
-  </script>
+// Start
+setLesson('ALL');
+</script>
 </body>
 </html>
